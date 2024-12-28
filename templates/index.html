@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CofeMine - Minecraft Server</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+    <audio id="background-music" autoplay loop>
+        <source src="/static/audio/background-music.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает воспроизведение аудио.
+    </audio>
+
+    <!-- Фиксированное меню -->
+    <div class="sticky-menu hidden">
+        <h1>CofeMine</h1>
+        <div class="buttons-container">
+            <a href="/launcher-download" class="button">Скачать лаунчер</a>
+            <a href="/modpack-download" class="button">Скачать сборку</a>
+        </div>
+    </div>
+
+
+
+    <!-- Приветственный экран -->
+    <section class="welcome-screen">
+        <div class="welcome-content">
+            <h1>CofeMine</h1>
+            <p>Добро пожаловать в конченый мир Minecraft!</p>
+            <a href="/launcher-download" class="button">Скачать лаунчер</a>
+        </div>
+    </section>
+
+    <!-- Раздел "Почему мы?" -->
+<section class="why-us">
+    <h2>Почему мы?</h2>
+    <div class="why-us-container">
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/server-icon.png" alt="Более 0 серверов">
+            </div>
+            <div class="card-text">
+                <h3>Более 0 серверов</h3>
+                <p>Играй на любом сервере и теряй новых друзей!</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/nodonate-icon.png" alt="Нет донат вещей">
+            </div>
+            <div class="card-text">
+                <h3>Нет донат вещей</h3>
+                <p>Потому что у нас нет денег и у вас тоже, а если есть, то дайте, кушать хочу.</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/mods-icon.png" alt="Дохуя модов">
+            </div>
+            <div class="card-text">
+                <h3>Дохуя модов</h3>
+                <p>Никто не знает какие именно.</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-video">
+                <video autoplay loop muted>
+                    <source src="/static/videos/sneaky.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            </div>
+            <div class="card-text">
+                <h3>Бархатные подкрадули</h3>
+                <p>Только у нас подкрадули крашули, один прыжок — и сервера нет нахуй.</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/economy-icon.png" alt="Развитая экономика">
+            </div>
+            <div class="card-text">
+                <h3>Развитая экономика</h3>
+                <p>1 починка за 5928 изумрудов!</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/ufo-icon.png" alt="Неведомая летающая хуйня v2.0">
+            </div>
+            <div class="card-text">
+                <h3>Неведомая летающая хуйня v2.0</h3>
+                <p>Что это блять?</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Блок "Адрес сервера" -->
+    <section class="server-details">
+        <h2>Наш сервер</h2>
+        <div class="server-card">
+            <div class="server-info">
+                <h3>CofeMine</h3>
+                <p><strong>IP:</strong> cofemine.ru</p>
+                <div class="server-status">
+                    <div class="status-indicator"></div>
+                    <p class="status-text">Статус: Загрузка...</p>
+                </div>
+                <p class="players-count">Игроков: Загрузка...</p>
+                <a href="#" class="button download-button">Скачать сборку</a>
+            </div>
+            <div class="server-image">
+                <img src="/static/img/cofemine-server.jpg" alt="CofeMine Server">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Блок "Наша команда" -->
+    <section class="team">
+        <h2>Наша команда</h2>
+        <div class="team-container">
+            <div class="team-member">
+                <img src="/static/img/cofedish.png" alt="COFEDISH">
+                <h3>COFEDISH</h3>
+                <p>DevOps курильщика, визитка за ночь</p>
+            </div>
+            <div class="team-member">
+                <img src="/static/img/w1ng.png" alt="W1ng">
+                <h3>W1ng</h3>
+                <p>Главный сборщик мус.. ой модов</p>
+            </div>
+            <div class="team-member">
+                <img src="/static/img/beckel.png" alt="Беккель">
+                <h3>Беккель</h3>
+                <p>Боевой вертолёт Apache</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Подвал -->
+    <footer>
+        <p>© 2024 CofeMine. Все права защищены Беккелем. <a href="/contacts">Контакты</a></p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
