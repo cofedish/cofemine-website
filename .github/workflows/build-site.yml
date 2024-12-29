@@ -1,0 +1,56 @@
+name: Build and Publish Site Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Клонирование репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Шаг 2: Логин в Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Шаг 3: Генерация уникального тега
+      - name: Generate Unique Tag
+        id: generate_tag
+        run: |
+          BASE_TAG="site-v$(date +'%Y-%m-%d')"
+          UNIQUE_SUFFIX=$(date +%s)
+          TAG="${BASE_TAG}-${UNIQUE_SUFFIX}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Generated tag: $TAG"
+
+      # Шаг 4: Сборка Docker-образа
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} ./cofemine-web
+          docker tag ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/cofemine-web:latest
+
+      # Шаг 5: Публикация Docker-образа
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/cofemine-web:latest
+
+      # Шаг 6: Создание релиза на GitHub
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.TAG }}
+          release_name: "Site Release ${{ env.TAG }}"
+          body: "Docker-образ для сайта Cofemine: `${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }}`"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
