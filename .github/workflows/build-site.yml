@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Шаг 3: Генерация уникального тега
+      # Шаг 3: Генерация уникального тега hehe
       - name: Generate Unique Tag
         id: generate_tag
         run: |
