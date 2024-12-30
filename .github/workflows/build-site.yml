@@ -34,7 +34,7 @@ jobs:
       # Шаг 4: Сборка Docker-образа
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} ./cofemine-website
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} .
           docker tag ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/cofemine-web:latest
 
       # Шаг 5: Публикация Docker-образа
