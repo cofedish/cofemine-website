@@ -3,7 +3,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #faf7f4; /* Светло-бежевый фон */
-    color: #5d4037; /* Кофейный цвет текста */
+    color: #5d4037;            /* Кофейный цвет текста */
 }
 
 #audio {
@@ -52,7 +52,6 @@ body {
     transition: background-color 0.3s ease;
     text-decoration: none;
 }
-
 .sticky-menu .button:hover {
     background-color: #e8d5c5;
 }
@@ -60,19 +59,17 @@ body {
 /* Выравнивание кнопок справа */
 .sticky-menu .buttons-container {
     display: flex;
-    gap: 10px; /* Отступ между кнопками */
+    gap: 10px;
     margin-left: auto;
-    margin-right: 30px; /* Отступ от правого края */
-    justify-content: flex-end; /* Выровнять кнопки справа */
+    margin-right: 30px;
+    justify-content: flex-end;
 }
 
-
-
-
-/* Приветственный экран */
+/* === WELCOME SCREEN === */
 .welcome-screen {
-    background: url('/static/img/minecraft-bg.jpg') no-repeat center center/cover;
+    position: relative;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,16 +77,62 @@ body {
     color: #ffffff;
 }
 
+/* затемняющий оверлей поверх видео, под текстом */
+.welcome-screen::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);  /* 40% чёрного */
+    z-index: 1;
+}
+
+/* видео на заднем плане */
+.welcome-screen video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* контейнер с текстом и кнопкой */
+.welcome-content {
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 3s ease, transform 3s ease;
+}
+
+.welcome-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .welcome-content h1 {
+    color: #f1e3db;
     font-size: 4rem;
     margin: 0 0 10px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    text-shadow:
+        -3px -1px 0 #5d4037,
+         1px -1px 0 #5d4037,
+        -1px  1px 0 #5d4037,
+         1px  1px 0 #5d4037;
 }
 
 .welcome-content p {
     font-size: 1.5rem;
+    color: #f1e3db;
     margin: 0 0 20px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    -webkit-text-stroke: 0.1px #5d4037;
+  /* фоллбэк-обводка через text-shadow для остальных */
+    text-shadow:
+        -1px -1px 0 #5d4037,
+         1px -1px 0 #5d4037,
+        -1px  1px 0 #5d4037,
+         1px  1px 0 #5d4037;
 }
 
 .welcome-content .button {
@@ -100,12 +143,11 @@ body {
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
-
 .welcome-content .button:hover {
     background-color: #e8d5c5;
 }
 
-/* Почему мы */
+/* === Почему мы? === */
 .why-us {
     padding: 40px 20px;
     background-color: #fff;
@@ -127,19 +169,16 @@ body {
 
 .why-us-card {
     background-color: #fef8f5;
-    width: 350px; /* Фиксированная ширина карточек */
-    height: 300px; /* Фиксированная высота карточек */
-    padding: 0;
+    width: 350px;
+    height: 300px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .why-us-card:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -148,7 +187,7 @@ body {
 .card-video,
 .card-image {
     width: 100%;
-    height: 250px; /* Увеличенная высота для видео/изображения */
+    height: 250px;
     overflow: hidden;
     border-bottom: 1px solid #e0e0e0;
     position: relative;
@@ -159,7 +198,6 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
 .card-text {
@@ -176,17 +214,14 @@ body {
 .card-text p {
     font-size: 0.9rem;
     color: #8d6e63;
-    margin: 0;
 }
 
-
-/* Блок "Адрес сервера" */
+/* === Адрес сервера === */
 .server-details {
     padding: 40px 20px;
     background-color: #faf7f4;
     text-align: center;
 }
-
 .server-details h2 {
     font-size: 2.5rem;
     color: #6d4c41;
@@ -207,7 +242,6 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .server-card:hover {
     transform: scale(1.02);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -218,13 +252,11 @@ body {
     padding: 20px;
     text-align: left;
 }
-
 .server-info h3 {
     font-size: 1.8rem;
     margin-bottom: 10px;
     color: #6d4c41;
 }
-
 .server-info p {
     font-size: 1.5rem;
     color: #8d6e63;
@@ -232,40 +264,33 @@ body {
     line-height: 1.5;
 }
 
-/* Индикатор статуса сервера */
 .server-status {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-top: 10px;
 }
-
 .status-indicator {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: gray; /* Серый цвет для загрузки */
+    background-color: gray;
     border: 2px solid #d9d9d9;
-    flex-shrink: 0;
-    transition: background-color 0.3s ease; /* Плавный переход для изменения цвета */
+    transition: background-color 0.3s ease;
 }
-
 .status-indicator.online {
-    background-color: green; /* Зеленый для онлайн */
+    background-color: green;
     border-color: #6d4c41;
 }
-
 .status-indicator.offline {
-    background-color: red; /* Красный для оффлайн */
+    background-color: red;
     border-color: #6d4c41;
 }
-
 .status-text {
     font-size: 1rem;
     color: #6d4c41;
 }
 
-/* Изображение сервера */
 .server-image {
     flex: 1;
     display: flex;
@@ -273,7 +298,6 @@ body {
     align-items: center;
     padding: 10px;
 }
-
 .download-button {
     display: inline-block;
     margin-top: 15px;
@@ -286,13 +310,10 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
 .download-button:hover {
     background-color: #5d4037;
     transform: scale(1.05);
 }
-
-
 .server-image img {
     max-width: 100%;
     border-radius: 10px;
@@ -300,43 +321,38 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Блок "Наша команда" */
+/* === Наша команда === */
 .team {
     padding: 20px;
     background-color: #fff;
     text-align: center;
 }
-
 .team-container {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
-
 .team-member {
     background-color: #fef8f5;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 200px; /* Фиксированная ширина карточек */
+    width: 200px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .team-member:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-
 .team-member img {
-    width: 100px; /* Размер круга */
-    height: 100px; /* Размер круга */
-    object-fit: cover; /* Обрезка по краям для сохранения пропорций */
-    border-radius: 50%; /* Делает изображение круглым */
-    margin-bottom: 10px; /* Отступ от текста */
-    border: 3px solid #f1e3db; /* Рамка вокруг изображения */
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #f1e3db;
 }
-
 
 /* Подвал */
 footer {
@@ -345,31 +361,28 @@ footer {
     text-align: center;
     padding: 20px 0;
 }
-
 footer a {
     color: #f1e3db;
     text-decoration: none;
 }
 
+/* Контакты */
 .contacts {
     padding: 40px 20px;
     text-align: center;
     background-color: #faf7f4;
 }
-
 .contacts h2 {
     font-size: 2.5rem;
     color: #6d4c41;
     margin-bottom: 20px;
 }
-
 .contacts-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
 }
-
 .contact-card {
     background-color: #fff;
     padding: 20px;
@@ -381,25 +394,37 @@ footer a {
     color: #6d4c41;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .contact-card:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-
 .contact-card img {
     width: 50px;
     height: 50px;
     margin-bottom: 10px;
 }
-
 .contact-card h3 {
     font-size: 1.2rem;
     margin: 10px 0 5px;
 }
-
 .contact-card p {
     font-size: 0.9rem;
     color: #8d6e63;
 }
 
+/* Сбрасываем дефолтный синий для наших карточек */
+.team-member-link,
+.team-member-link:link,
+.team-member-link:visited,
+.team-member-link:hover,
+.team-member-link:active {
+  color: inherit;         /* берём цвет из .team-member */
+  text-decoration: none;  /* убираем подчёркивание */
+}
+
+/* Иногда заголовок и текст всё равно тянут link-стиль —
+   явно укажем им кофейный */
+.team-member-link h3,
+.team-member-link p {
+  color: inherit;
+}

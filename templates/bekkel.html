@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vergil — CofeMine</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bekkel.css') }}">
+</head>
+<body>
+  <div class="vergil-page">
+    <!-- Темный полупрозрачный оверлей -->
+    <div class="overlay"></div>
+
+    <!-- SSS-плашка и имя -->
+    <header class="vp-header">
+      <img src="{{ url_for('static', filename='img/vergil/Беккель_маск.png') }}"
+           alt="SSS Rank" class="rank-badge">
+      <h1>Vergil</h1>
+      <p class="subtitle">Power Rank: SSS</p>
+    </header>
+
+    <!-- Центрированный видео-блок -->
+    <main class="vp-main">
+      <div class="meme-frame">
+        <video
+          id="vergil-video"
+          class="vp-video"
+          controls autoplay loop>
+          <source
+            src="{{ url_for('static', filename='videos/vergil/your-video.mp4') }}"
+            type="video/mp4">
+          Ваш браузер не поддерживает видео.
+        </video>
+      </div>
+    </main>
+
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const videoEl = document.getElementById('vergil-video');
+  // ... ваш код выбора src ...
+  videoEl.src = `/static/videos/vergil/your-video.mp4`;
+  videoEl.load();
+  videoEl.muted  = false;   // звук включён
+  videoEl.volume = 0.4;     // начальная громкость 10%
+});
+</script>
+
+</body>
+</html>

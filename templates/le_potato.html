@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Le_Potato Arcade — CofeMine</title>
+  <!-- Pixel-шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/le_potato.css') }}"
+  />
+</head>
+<body>
+  <div class="arcade-cabinet">
+    <div class="cabinet-marquee">
+      <h1>Le_Potato Arcade</h1>
+    </div>
+
+    <div class="cabinet-screen">
+      <video
+        id="potato-video"
+        class="screen-video"
+        controls
+        loop
+        muted
+      ></video>
+    </div>
+
+    <div class="cabinet-controls">
+      <div class="joystick"></div>
+      <div class="buttons">
+        <div class="btn btn-red"></div>
+        <div class="btn btn-blue"></div>
+      </div>
+      <div class="score">HIGH SCORE<br/><span>9999</span></div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // подгрузка видео-мема...
+    fetch('/api/memes/le_potato')
+      .then(r=>r.json())
+      .then(list=>{
+        if(!list.length) return;
+        const file = list[Math.floor(Math.random()*list.length)];
+        const v = document.getElementById('potato-video');
+        v.src = `/static/videos/memes/le_potato/${file}`;
+        v.load();
+        v.muted  = false;
+        v.volume = 0.1;
+      });
+
+    // красная кнопка — Play/Pause
+    document.querySelector('.btn-red').addEventListener('click',()=>{
+      const v = document.getElementById('potato-video');
+      v.paused ? v.play() : v.pause();
+    });
+
+    const cabinet = document.querySelector('.arcade-cabinet');
+    document.querySelector('.btn-blue').addEventListener('click', () => {
+      cabinet.classList.add('glow');
+      cabinet.addEventListener('animationend', function onEnd() {
+        cabinet.classList.remove('glow');
+        cabinet.removeEventListener('animationend', onEnd);
+      });
+    });
+  });
+  </script>
+
+</body>
+</html>
