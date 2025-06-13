@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Клонирование репозитория
+      # Шаг 1: Клонирование репозитория с поддержкой Git LFS
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          lfs: true
 
       # Шаг 2: Логин в Docker Hub
       - name: Log in to Docker Hub
@@ -34,8 +36,12 @@ jobs:
       # Шаг 4: Сборка Docker-образа
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} .
-          docker tag ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/cofemine-web:latest
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} \
+            .
+          docker tag \
+            ${{ secrets.DOCKER_USERNAME }}/cofemine-web:${{ env.TAG }} \
+            ${{ secrets.DOCKER_USERNAME }}/cofemine-web:latest
 
       # Шаг 5: Публикация Docker-образа
       - name: Push Docker Image
