@@ -1,0 +1,154 @@
+/* ===================================================================
+   Le_Potato Arcade — адаптивный аркадный автомат под размер видео
+   + glow-эффект всего корпуса по нажатию
+   =================================================================== */
+
+/* 1) Сброс */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* 2) Анимация glow для корпуса */
+@keyframes cabinetGlow {
+  0%   { box-shadow:
+           inset 0 0 30px rgba(255,85,85,0.4),
+           0 0 20px rgba(0,0,0,0.7); }
+  50%  { box-shadow:
+           inset 0 0 30px rgba(255,85,85,0.4),
+           0 0 20px rgba(0,68,255,0.9); }
+ 100%  { box-shadow:
+           inset 0 0 30px rgba(255,85,85,0.4),
+           0 0 20px rgba(0,0,0,0.7); }
+}
+
+/* 3) Корпус автомата — ширина по контенту, максимум 90% экрана */
+.arcade-cabinet {
+  display: inline-block;
+  background: #1a1a1a;
+  border: 6px solid #333;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 30px rgba(255,85,85,0.4),
+    0 0 20px rgba(0,0,0,0.7);
+  overflow: hidden;
+  max-width: 90vw;
+  /* подготовка для анимации */
+  transition: box-shadow 0.2s ease;
+}
+
+/* класс-триггер для glow */
+.arcade-cabinet.glow {
+  animation: cabinetGlow 0.6s ease-in-out;
+}
+
+/* 4) Верхняя табличка (marquee) */
+.cabinet-marquee {
+  background: linear-gradient(90deg, #ff0044, #ff7700);
+  padding: 10px 0;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(255,119,0,0.8);
+}
+.cabinet-marquee h1 {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #fff;
+  text-shadow:
+    0 0 4px rgba(255,255,255,0.8),
+    0 0 8px rgba(255,0,68,0.7);
+}
+
+/* 5) Экран автомата */
+.cabinet-screen {
+  background: #000;
+  padding: 8px;
+  position: relative;
+}
+.cabinet-screen::before {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px; right: 4px; bottom: 4px;
+  border: 2px solid #555;
+  border-radius: 6px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+  pointer-events: none;
+}
+
+/* 6) Видео — адаптивно под размер корпуса */
+.screen-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #000;
+}
+
+/* 7) Панель управления */
+.cabinet-controls {
+  background: #222;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* 8) Джойстик */
+.joystick {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle at 20px 20px, #666, #333);
+  border: 4px solid #444;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 6px rgba(0,0,0,0.5) inset;
+}
+.joystick::after {
+  content: '';
+  position: absolute;
+  top: 6px; left: 14px;
+  width: 12px; height: 12px;
+  background: #ff0044;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(255,0,68,0.6);
+}
+
+/* 9) Кнопки */
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #444;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5) inset;
+}
+.btn-red  { background: #ff0044; }
+.btn-blue { background: #0044ff; }
+
+/* 10) Табло «High Score» */
+.score {
+  text-align: center;
+  color: #0f0;
+  font-size: 0.65rem;
+  text-shadow: 0 0 4px rgba(0,255,0,0.8);
+}
+.score span {
+  font-size: 1.2rem;
+  display: block;
+}

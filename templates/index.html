@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="static/img/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CofeMine - Minecraft Server</title>
     <link rel="stylesheet" href="/static/css/styles.css">
@@ -17,20 +18,18 @@
     <div class="sticky-menu hidden">
         <h1>CofeMine</h1>
         <div class="buttons-container">
-            <a href="/launcher-download" class="button">Скачать лаунчер</a>
             <a href="https://github.com/cofedish/cofemine-sborka-client/releases/latest/download/cofemine-client.zip" class="button">Скачать сборку</a>
         </div>
     </div>
 
-
-
-    <!-- Приветственный экран -->
-    <section class="welcome-screen">
-        <div class="welcome-content">
-            <h1>CofeMine</h1>
-            <p>Добро пожаловать в конченый мир Minecraft!</p>
-            <a href="/launcher-download" class="button">Скачать лаунчер</a>
-        </div>
+      <!-- WELCOME SCREEN -->
+    <section id="welcome" class="welcome-screen">
+    <video id="bg-video" class="welcome-screen__video" autoplay muted loop playsinline></video>
+    <div class="welcome-content">
+      <h1>CofeMine</h1>
+      <p>Добро пожаловать в конченый мир Minecraft!</p>
+      <a id="download" href="https://github.com/cofedish/cofemine-sborka-client/releases/latest/download/cofemine-client.zip" class="button">Скачать сборку</a>
+    </div>
     </section>
 
     <!-- Раздел "Почему мы?" -->
@@ -118,32 +117,47 @@
     </section>
 
 
-    <!-- Блок "Наша команда" -->
+        <!-- Блок "Наша команда" -->
     <section class="team">
-        <h2>Наша команда</h2>
-        <div class="team-container">
+      <h2>Наша команда</h2>
+      <div class="team-container">
+        <!-- CofeDish -->
+        <a href="{{ url_for('cofedish') }}" class="team-member-link">
+          <div class="team-member">
+            <img src="{{ url_for('static', filename='img/cofedish.png') }}" alt="COFEDISH">
+            <h3>COFEDISH</h3>
+            <p>DevOps курильщика, визитка за ночь</p>
+          </div>
+        </a>
+
+        <a href="{{ url_for('beetwin') }}" class="team-member-link">
             <div class="team-member">
-                <img src="/static/img/cofedish.png" alt="COFEDISH">
-                <h3>COFEDISH</h3>
-                <p>DevOps курильщика, визитка за ночь</p>
+              <img src="{{ url_for('static', filename='img/beetwin.png') }}" alt="Beetwin">
+              <h3>Beetwin</h3>
+              <p>Начальник завода</p>
             </div>
-            <div class="team-member">
-                <img src="/static/img/beetwin.png" alt="Елеся">
-                <h3>Beetwin</h3>
-                <p>Начальник завода</p>
-            </div>
-            <div class="team-member">
-                <img src="/static/img/beckel.png" alt="Беккель">
-                <h3>Беккель</h3>
-                <p>Боевой вертолёт Apache</p>
-            </div>
-            <div class="team-member">
-                <img src="/static/img/demid.png" alt="Demid">
-                <h3>Le_Potato</h3>
-                <p>Раб...ботник</p>
-            </div>
-        </div>
+
+        <!-- Беккель -->
+        <a href="{{ url_for('bekkel') }}" class="team-member-link">
+          <div class="team-member">
+            <img src="{{ url_for('static', filename='img/beckel.png') }}" alt="Беккель">
+            <h3>Беккель</h3>
+            <p>Боевой вертолёт Apache</p>
+          </div>
+        </a>
+
+        <!-- Le_Potato -->
+        <a href="{{ url_for('le_potato') }}" class="team-member-link">
+          <div class="team-member">
+            <img src="{{ url_for('static', filename='img/demid.png') }}" alt="Le_Potato">
+            <h3>Le_Potato</h3>
+            <p>Раб...ботник</p>
+          </div>
+        </a>
+      </div>
     </section>
+
+
 
 
     <!-- Подвал -->
@@ -151,6 +165,6 @@
         <p>© 2025 CofeMine. Все права защищены Беккелем. <a href="/contacts">Контакты</a></p>
     </footer>
 
-    <script src="/static/js/script.js"></script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
