@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>CofeMine Gazette — Спецвыпуск про Beetwin</title>
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/beetwin_newspaper.css') }}">
+</head>
+<body>
+  <div class="gazette">
+    <!-- Шапка газеты -->
+    <header class="gazette-header">
+      <h1>CofeMine Gazette</h1>
+      <p class="date">14 июня 2025</p>
+    </header>
+
+    <!-- Главный заголовок -->
+    <section class="headline">
+      <h2>НАЧАЛЬНИК ЗАВОДА УЧИНИЛ БЕСПРЕДЕЛ!</h2>
+      <p class="subhead">
+        Завод металлических каркасов всё ещё не готов: работники в полном ахуе
+      </p>
+    </section>
+
+    <!-- Три колонки текста -->
+    <section class="columns">
+      <article>
+        <h3>Саня обещал построить завод каркасов</h3>
+        <p>
+          По словам Саня, «завод каркасов готов на 110%… из картона», — цех просто в ахуе!
+        </p>
+      </article>
+
+      <article>
+        <h3>2. Яндекс закончится или блять...</h3>
+        <p>
+          Яндексоиды в полном ахуе блять, че праисходит.
+        </p>
+      </article>
+
+      <article>
+        <h3>3. Когда?</h3>
+        <p>
+          Тогда
+        </p>
+      </article>
+    </section>
+
+    <!-- Врезка-скан мем-видео -->
+    <aside class="video-clip">
+      <div class="clip-frame">
+        <video id="beetwin-video" controls autoplay loop muted>
+          Ваш браузер не поддерживает видео.
+        </video>
+      </div>
+      <p class="caption">
+        «Ворк это не волк, а форк это не фолк»
+      </p>
+    </aside>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/memes/beetwin')
+        .then(r => r.json())
+        .then(list => {
+          if (!list.length) return;
+          const file = list[Math.floor(Math.random() * list.length)];
+          const v = document.getElementById('beetwin-video');
+          v.src = `/static/videos/memes/beetwin/${file}`;
+          v.load();
+          v.muted = false;
+          v.volume = 0.1;
+        })
+        .catch(console.error);
+    });
+  </script>
+</body>
+</html>

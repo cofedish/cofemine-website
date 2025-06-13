@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>COFEDISH — CofeMine</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cofedish.css') }}">
+</head>
+<body>
+  <header>
+    <a href="{{ url_for('home') }}">← Назад</a>
+    <h1>COFEDISH</h1>
+  </header>
+
+  <main>
+    <img src="{{ url_for('static', filename='img/devops.jpg') }}"
+         alt="COFEDISH" class="profile-img">
+
+    <p>DevOps курильщика, визитка за ночь.</p>
+
+    <h2>Зацените какую хуйню сделал</h2>
+
+    <div class="meme-frame">
+      <video id="meme-video"
+             controls autoplay loop>
+        Ваш браузер не поддерживает видео.
+      </video>
+    </div>
+
+    <p class="caption">Чем я блять занимаюсь в 4 утра...😅</p>
+  </main>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/memes/cofedish')
+      .then(res => res.json())
+      .then(list => {
+        if (!list.length) return;
+        const file = list[Math.floor(Math.random() * list.length)];
+        const videoEl = document.getElementById('meme-video');
+        videoEl.src = `/static/videos/memes/cofedish/${file}`;
+        videoEl.load();
+        videoEl.muted  = false;
+        videoEl.volume = 0.2;
+      })
+      .catch(console.error);
+  });
+  </script>
+</body>
+</html>
