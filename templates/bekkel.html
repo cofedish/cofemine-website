@@ -26,7 +26,7 @@
           class="vp-video"
           controls autoplay loop>
           <source
-            src="{{ url_for('static', filename='videos/vergil/your-video.mp4') }}"
+            src="{{ url_for('static', filename='videos/vergil/storm.mp4') }}"
             type="video/mp4">
           Ваш браузер не поддерживает видео.
         </video>
@@ -39,7 +39,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const videoEl = document.getElementById('vergil-video');
   // ... ваш код выбора src ...
-  videoEl.src = `/static/videos/vergil/your-video.mp4`;
+  videoEl.src = `/static/videos/vergil/storm.mp4`;
   videoEl.load();
   videoEl.muted  = false;   // звук включён
   videoEl.volume = 0.4;     // начальная громкость 10%

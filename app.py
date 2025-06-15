@@ -1,8 +1,11 @@
 import os
 from datetime import date
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET', 'dawseohdffesfsef32132h3b1231')
+
+
 
 @app.route('/')
 def home():
@@ -43,16 +46,24 @@ def api_memes_beetwin():
     return jsonify(files)
 
 
-@app.route('/team/beetwin')
+@app.route('/team/beetwin', methods=['GET','POST'])
 def beetwin():
-    today        = date.today()
-    special_date = date(today.year, 6, 23)  # ваша «особая дата»
-    if today == special_date:
-        # рендерим совсем другой файл
-        return render_template('beetwin_special.html')
-    else:
-        # обычный
-        return render_template('beetwin.html')
+    # проверка сессии
+    if not session.get('authenticated'):
+        # если форма отправлена
+        if request.method == 'POST':
+            print(os.getenv('OLESYA_PASS'))
+            pwd = request.form.get('password','')
+            # пароль можно тоже взять из ENV
+            if pwd == os.getenv('OLESYA_PASS'):
+                session['authenticated'] = True
+                return redirect(url_for('beetwin'))
+            else:
+                flash('Неверный пароль, попробуйте ещё раз.')
+        return render_template('olesya_login.html')
+
+    # если вошла — показываем поздравление
+    return render_template('beetwin_special.html')
 
 @app.route('/team/bekkel')
 def bekkel():
