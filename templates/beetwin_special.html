@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>С Днём Рождения</title>
+  <link rel="stylesheet" href="/static/css/beetwin.css">
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+</head>
+<body>
+  <div class="header-text">Happy Birthday, cepusilat!</div>
+
+  <!-- портал -->
+  <div id="portal-wrapper">
+    <img id="portal-img" src="/static/img/portal.png" alt="Портал">
+    <div id="portal-glow"></div>
+  </div>
+  <div id="portal-hint" class="portal-hint">Click on portal</div>
+  <div id="white-flash"></div>
+
+  <!-- видео и поздравление -->
+  <div id="video-congrats">
+    <div class="video-container">
+      <video id="side-left" class="side-video" loop muted preload="auto">
+        <source src="/static/videos/left.mp4" type="video/mp4">
+      </video>
+      <video id="congrats-video" class="main-video" preload="auto">
+        <source src="/static/videos/beautiful_minecraft.mp4" type="video/mp4">
+      </video>
+      <video id="side-right" class="side-video" loop muted preload="auto">
+        <source src="/static/videos/right.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div id="cofemine-key" class="key-wrapper">
+      <div class="key-card">
+        <div class="card-title">CofeMine</div>
+        <div class="card-desc">License Minecraft key:</div>
+        <div class="card-key">ABCD-EFGH-IJKL-MNOP</div>
+      </div>
+    </div>
+
+    <audio id="bday-music" src="/static/audio/happy_birthday.mp3"></audio>
+  </div>
+
+  <div class="footer-support">При поддержке Беккеля</div>
+  <script src="/static/js/beetwin.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Ну очень вкусное блюдо из курицы, или вороны, карыча? acho?</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/olesya_congrats.css') }}">
+</head>
+<body>
+  <div class="password-gate">
+
+    <form id="password-form" method="post" autocomplete="off">
+      <label for="password-input">Введите пароль:</label>
+      <input id="password-input" type="password" name="password" required autofocus>
+      <button type="submit">Войти</button>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="password-error">
+            {{ messages[0] }}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </form>
+  </div>
+</body>
+</html>
