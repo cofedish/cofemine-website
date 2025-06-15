@@ -1,0 +1,327 @@
+/* static/css/beetwin.css */
+
+/* ————————————————————————————————————————————————————————————
+   БАЗОВЫЕ СТИЛИ
+   ———————————————————————————————————————————————————————————— */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #262524;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* заголовок */
+.header-text {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.2rem;
+  color: #ffd373;
+  text-shadow: 0 2px 8px #000b;
+  z-index: 50;
+  pointer-events: none;
+  font-family: 'Minecraft', 'Minecraftia', Arial, sans-serif;
+  user-select: none;
+}
+
+/* ————————————————————————————————————————————————————————————
+   ПОРТАЛ
+   ———————————————————————————————————————————————————————————— */
+
+/* обёртка портала */
+#portal-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 420px;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  transition: transform 1.2s cubic-bezier(.51,.11,.73,1.5),
+              filter    0.6s ease;
+  z-index: 10;
+}
+
+/* само изображение портала */
+#portal-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  top: 0; left: 0;
+  z-index: 12;
+  cursor: pointer;
+}
+
+/* эффект свечения внутри портала */
+#portal-glow {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  width: 260px;
+  height: 340px;
+  border-radius: 36px;
+  background: radial-gradient(ellipse, #ff84ec77 70%, transparent 100%);
+  pointer-events: none;
+  z-index: 13;
+  animation: portal-pulse 1.7s infinite alternate;
+}
+
+@keyframes portal-pulse {
+  0%   {filter:blur(5px) brightness(1.0); opacity:.8;}
+  80%  {filter:blur(16px) brightness(1.2); opacity:1;}
+  100% {filter:blur(24px) brightness(1.4); opacity:.7;}
+}
+
+/* подсказка “Нажми на портал” */
+.portal-hint {
+  position: absolute;
+  top: calc(50% + 280px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: #f7b9c0;
+  font-size: 1.2rem;
+  text-shadow: 0 0 4px #fff9, 0 2px 8px #000;
+  z-index: 22;
+  pointer-events: none;
+  user-select: none;
+  animation: hint-fade 2.7s infinite alternate;
+  font-family: 'Minecraft', Arial, sans-serif;
+}
+
+@keyframes hint-fade {
+  from { opacity: 0.65; }
+  to   { opacity: 1;    }
+}
+
+/* белая вспышка */
+#white-flash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+  transition: opacity 0.4s ease;
+}
+
+/* ————————————————————————————————————————————————————————————
+   ПОЗДРАВЛЕНИЕ / ВИДЕО
+   ———————————————————————————————————————————————————————————— */
+
+#video-congrats {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #212020;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 100;
+}
+
+#video-congrats.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* контейнер, в котором лежат все видео */
+.video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+/* главное видео */
+#congrats-video {
+  width: 65vw;
+  max-width: 800px;
+  max-height: 68vh;
+  border-radius: 20px;
+  background: #1e1e22;
+  box-shadow: 0 0 44px #ffb3e1;
+  opacity: 0;
+  display: none
+  transition: opacity 0.7s ease;
+}
+
+#congrats-video.visible {
+  max-width: 1366px;
+  max-height: 768px;
+  width: 80vw;
+  height: 45vw;
+  opacity: 1;
+}
+
+/* боковые видео — по умолчанию невидимы */
+.side-video {
+  width: 400px;
+  height: 700px;
+  border-radius: 18px;
+  object-fit: cover;
+  background: #1b1b1b;
+  border: 2px solid #d78be8;
+  box-shadow: 0 0 22px #ffe7f8;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+/* когда рамка появилась, показываем боковые видео */
+.side-video.visible {
+  opacity: 1;
+}
+
+/* ————————————————————————————————————————————————————————————
+   КАРТОЧКА С ЛИЦЕНЗИОННЫМ КЛЮЧОМ
+   ———————————————————————————————————————————————————————————— */
+
+/* обёртка карточки + позиция по вертикали */
+#cofemine-key {
+  position: fixed;
+  top: 35vh;           /* поднято выше */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  z-index: 75;
+}
+
+#cofemine-key.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* карточка ключа: сделаем больше, другой зелёный тон */
+.key-wrapper {
+  margin-top:24px;
+  opacity:0; transition:opacity .6s;
+  pointer-events:none; z-index:75;
+}
+.key-wrapper.visible { opacity:1; }
+.key-card {
+  background:#32452f;
+  border:4px solid #a5d6a7;
+  border-radius:16px;
+  padding:30px 40px;
+  text-align:center;
+  font-family:'Minecraft',sans-serif;
+  box-shadow:0 0 24px #000;
+  transform:scale(1.1);
+  animation:key-appear .8s ease-out forwards;
+}
+@keyframes key-appear { from{transform:scale(.6)} to{transform:scale(1.1)} }
+
+.card-title {
+  font-size:2.2rem;
+  color:#aed581;
+  margin-bottom:8px;
+  text-shadow:1px 1px #000;
+}
+.card-desc {
+  font-size:1rem;
+  color:#c5e1a5;
+  margin-bottom:12px;
+}
+.card-key {
+  background:#8bc34a;
+  color:#fff;
+  padding:10px 20px;
+  font-size:1.3rem;
+  letter-spacing:2px;
+  border-radius:8px;
+  box-shadow:0 0 12px #5a9216;
+}
+
+/* музыка */
+audio { display:none; }
+
+/* сам 3D-блок */
+.key-box-3d {
+  background: linear-gradient(145deg, #b6b0a0 0%, #e8e2d6 100%);
+  border: 7px solid #ffc8fa;
+  border-radius: 26px;
+  padding: 38px 50px 28px;
+  min-width: 450px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 0 64px #ffb3e1, 0 4px 44px #181218;
+  filter: drop-shadow(0 0 26px #ffb3e188);
+  animation: keybox-glow 2.7s infinite alternate;
+  perspective: 400px;
+}
+
+@keyframes keybox-glow {
+  from { box-shadow: 0 0 64px #ffb3e1, 0 4px 44px #181218; }
+  to   { box-shadow: 0 0 96px #ffc8fa, 0 4px 64px #181218; }
+}
+
+/* заголовок внутри карточки */
+.key-title-3d {
+  font-family: 'Minecraft', 'Minecraftia', Arial, sans-serif;
+  font-size: 2.4rem;
+  color: #ffc8fa;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px #9b8eac, 0 0 22px #ffc8fa;
+  transform: perspective(120px) rotateX(12deg);
+}
+
+/* описание */
+.key-desc-3d {
+  font-size: 1rem;
+  color: #e7c0d7;
+  margin-bottom: 16px;
+}
+
+/* собственно ключ */
+.key-value-3d {
+  font-family: 'Minecraft', 'Consolas', monospace;
+  font-size: 1.5rem;
+  color: #fff;
+  background: linear-gradient(145deg, #fa8cd7 0%, #fff 100%);
+  padding: 16px 36px;
+  border-radius: 14px;
+  border: 2px solid #ffc8fa;
+  letter-spacing: 3px;
+  box-shadow: 0 0 28px #fa8cd7bb;
+  text-shadow: 0 3px 7px #26252444, 0 0 18px #ffb3e1cc;
+  transform: perspective(200px) rotateY(-12deg);
+  display: inline-block;
+}
+
+/* ————————————————————————————————————————————————————————————
+   ФУТЕР
+   ———————————————————————————————————————————————————————————— */
+
+.footer-support {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #bd87fa;
+  font-family: 'Minecraft', Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  opacity: 0.77;
+  text-shadow: 1px 1px 3px #000a;
+  user-select: none;
+}
