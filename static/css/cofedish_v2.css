@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Press Start 2P', monospace;
+  background: url('/static/assets/cofedish/bg-cofedish.png') center center/cover fixed no-repeat;
+}
+
+.profile-container {
+  max-width: 960px;
+  margin: 40px auto;
+  background: rgba(250, 255, 251,0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  background: #d1ffe7;
+  padding: 16px;
+  border-bottom: 2px solid #00e36a;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border: 3px solid #00e36a;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.username {
+  margin-left: 16px;
+  font-size: 28px;
+  color: #00e36a;
+}
+
+.actions {
+  margin-left: auto;
+}
+
+.btn {
+  font-family: inherit;
+  background: #fff;
+  color: #00e36a;
+  border: 2px solid #00e36a;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #f4e7c3;
+}
+
+.profile-content {
+  display: flex;
+  padding: 16px;
+}
+
+.sidebar {
+  width: 280px;
+}
+
+.card {
+  background: rgba(247, 255, 240,0.8);
+  border: 2px solid #54b883;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.photos-grid,
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 6px;
+
+  grid-auto-rows: 90px;
+}
+
+.photos-grid img,
+.friends-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  border: 2px solid #54b883;
+  border-radius: 4px;
+}
+
+
+.subs ul {
+  list-style: none;
+  padding: 0;
+  color: #00e36a;
+}
+
+.subs li {
+  margin-bottom: 4px;
+}
+
+.posts {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.posts-header {
+  margin-bottom: 12px;
+}
+
+.post-list .post {
+  background: rgba(242, 255, 248,0.8);
+  border: 2px solid #54b883;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.post-list .post img,
+.post-list .post video {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}

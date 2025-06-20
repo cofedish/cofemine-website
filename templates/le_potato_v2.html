@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ username }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/le_potato_v2.css') }}">
+</head>
+<body>
+  <div class="profile-container">
+    <header class="profile-header">
+      <img class="avatar"
+           src="{{ url_for('static', filename='assets/le_potato/' + profile_data.avatar) }}"
+           alt="{{ username }} Avatar">
+      <h1 class="username">{{ username }}</h1>
+      <div class="actions">
+        <button class="btn btn-message">✉ Сообщение</button>
+        <button class="btn btn-more">☰ Ещё</button>
+      </div>
+    </header>
+
+    <section class="profile-content">
+      <aside class="sidebar">
+        <div class="card photos">
+          <h2>Фото</h2>
+          <div class="photos-grid">
+            {% for photo in profile_data.photos %}
+              <img src="{{ url_for('static', filename='assets/le_potato/' + photo) }}" alt="">
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card friends">
+          <h2>Друзья</h2>
+          <div class="friends-grid">
+            {% for friend in profile_data.friends %}
+              <img src="{{ url_for('static', filename='assets/le_potato/' + friend) }}" alt="">
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card subs">
+          <h2>Подписки</h2>
+          <ul>
+            {% for sub in profile_data.subs %}
+              <li>{{ sub }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </aside>
+
+      <main class="posts">
+        <div class="posts-header card">
+          <h2>Все посты</h2>
+        </div>
+        <div class="post-list">
+          {% for post in posts %}
+            {% if post.type == 'image' %}
+              <div class="card post">
+                <img src="{{ post.src }}" alt="Post Image">
+              </div>
+            {% elif post.type == 'video' %}
+              <div class="card post">
+                <video controls loop>
+                  <source src="{{ post.src }}">
+                  Ваш браузер не поддерживает видео.
+                </video>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </main>
+    </section>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('video').forEach(function(v) {
+        v.muted = false;    // если ранее стояло muted
+        v.volume = 0.05;     // 20% громкости
+      });
+    });
+  </script>
+</body>
+</html>
