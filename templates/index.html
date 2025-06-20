@@ -117,28 +117,30 @@
     </section>
 
 
-        <!-- Блок "Наша команда" -->
+    <!-- Блок "Наша команда" -->
     <section class="team">
       <h2>Наша команда</h2>
       <div class="team-container">
         <!-- CofeDish -->
-        <a href="{{ url_for('cofedish') }}" class="team-member-link">
+        <a href="{{ url_for('profile', username='cofedish') }}" class="team-member-link">
           <div class="team-member">
-            <img src="{{ url_for('static', filename='img/cofedish.png') }}" alt="COFEDISH">
+            <img src="{{ url_for('static', filename='img/avatar-cofedish.png') }}" alt="COFEDISH">
             <h3>COFEDISH</h3>
             <p>DevOps курильщика, Сын докер контейнера</p>
           </div>
         </a>
 
+        <!-- Beetwin -->
         <a href="{{ url_for('beetwin') }}" class="team-member-link">
-            <div class="team-member">
-              <img src="{{ url_for('static', filename='img/beetwin.png') }}" alt="Beetwin">
-              <h3>Beetwin</h3>
-              <p>Большой босс, генератор 300к в наносекунду</p>
-            </div>
+          <div class="team-member">
+            <img src="{{ url_for('static', filename='img/beetwin.png') }}" alt="Beetwin">
+            <h3>Beetwin</h3>
+            <p>Большой босс, генератор 300к в наносекунду</p>
+          </div>
+        </a>
 
         <!-- Беккель -->
-        <a href="{{ url_for('bekkel') }}" class="team-member-link">
+        <a href="{{ url_for('profile', username='bekkel') }}" class="team-member-link">
           <div class="team-member">
             <img src="{{ url_for('static', filename='img/bekkel.png') }}" alt="Беккель">
             <h3>Беккель</h3>
@@ -147,15 +149,16 @@
         </a>
 
         <!-- Le_Potato -->
-        <a href="{{ url_for('le_potato') }}" class="team-member-link">
+        <a href="{{ url_for('profile', username='le_potato') }}" class="team-member-link">
           <div class="team-member">
             <img src="{{ url_for('static', filename='img/demid.png') }}" alt="Le_Potato">
             <h3>Le_Potato</h3>
-            <p>Заслуженный 3д принтер России</p>
+            <p>Заслуженный 3d принтер России</p>
           </div>
         </a>
-        </div>
+      </div>
     </section>
+
 
     <!-- Подвал -->
     <footer>

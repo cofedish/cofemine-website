@@ -1,11 +1,61 @@
 import os
-from datetime import date
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+import random
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 
 app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET', 'dawseohdffesfsef32132h3b1231')
+app.secret_key = os.getenv('FLASK_SECRET')
 
-
+# Данные профилей
+PROFILES = {
+    'cofedish': {
+        'name': 'Cofedish',
+        'avatar': 'avatar-cofedish.png',
+        'photos': [
+            'photo1.png', 'photo2.png', 'photo3.png',
+            'photo4.png', 'photo5.png', 'photo6.png'
+        ],
+        'friends': [
+            'friend1.png', 'friend2.png',
+            'friend3.png'
+        ],
+        'subs': [
+            'HuyOps', 'CICI/DIDI',
+            'Bekkel', 'Idi Nahuy', 'Karpacho'
+        ]
+    },
+    'bekkel': {
+        'name': 'Bekkel',
+        'avatar': 'avatar-bekkel.png',
+        'photos': [
+            'photo1.png', 'photo2.png', 'photo3.png',
+            'photo4.png', 'photo5.png', 'photo6.png'
+        ],
+        'friends': [
+            'friend1.png', 'friend2.png',
+            'friend3.png'
+        ],
+        'subs': [
+            'YaEblan', 'Провоцирую', 'KaktusEnjoyers',
+            '#АлисаСтой', 'Helicopter', 'Baracopter'
+        ]
+    },
+    'le_potato': {
+        'name': 'Le Potato',
+        'avatar': 'avatar-le_potato.png',
+        'photos': [
+            'photo1.png', 'photo2.png', 'photo3.png',
+            'photo4.png', 'photo5.png', 'photo6.png'
+        ],
+        'friends': [
+            'friend1.png', 'friend2.png',
+            'friend3.png'
+        ],
+        'subs': [
+            'ShulkerBox', 'PotionMasters',
+            'EndCity', 'ChorusFarm', 'DragonSlayers'
+        ]
+    }
+}
 
 @app.route('/')
 def home():
@@ -19,69 +69,64 @@ def contacts():
 def team():
     return render_template('team.html')
 
-@app.route('/team/cofedish')
-def cofedish():
-    return render_template('cofedish.html')
-
-@app.route('/api/memes/cofedish')
-def api_memes_cofedish():
-    memes_dir = os.path.join(app.static_folder, 'videos', 'memes', 'cofedish')
-    try:
-        files = [
-            f for f in os.listdir(memes_dir)
-            if f.lower().endswith(('.mp4', '.webm', '.ogg'))
-        ]
-    except FileNotFoundError:
-        files = []
-    return jsonify(files)
-
-@app.route('/api/memes/beetwin')
-def api_memes_beetwin():
-    dir_ = os.path.join(app.static_folder, 'videos', 'memes', 'beetwin')
-    try:
-        files = [f for f in os.listdir(dir_)
-                 if f.lower().endswith(('.mp4','.webm','.ogg'))]
-    except:
-        files = []
-    return jsonify(files)
-
-
 @app.route('/team/beetwin', methods=['GET','POST'])
 def beetwin():
-    # проверка сессии
     if not session.get('authenticated'):
-        # если форма отправлена
         if request.method == 'POST':
-            print(os.getenv('OLESYA_PASS'))
             pwd = request.form.get('password','')
-            # пароль можно тоже взять из ENV
             if pwd == os.getenv('OLESYA_PASS'):
                 session['authenticated'] = True
                 return redirect(url_for('beetwin'))
             else:
                 flash('Неверный пароль, попробуйте ещё раз.')
         return render_template('olesya_login.html')
+    else:
+        return render_template('beetwin_special.html')
 
-    # если вошла — показываем поздравление
-    return render_template('beetwin_special.html')
+@app.route('/team/<username>')
+def profile(username):
+    # Если пользователя нет в PROFILES — 404
+    if username not in PROFILES:
+        abort(404)
+    data = PROFILES[username]
 
-@app.route('/team/bekkel')
-def bekkel():
-    return render_template('bekkel.html')
+    # 1) Выбираем 2 случайные картинки из photos
+    image_posts = random.sample(data['photos'], 2)
 
-@app.route('/api/memes/le_potato')
-def api_memes_le_potato():
-    dir_ = os.path.join(app.static_folder, 'videos', 'memes', 'le_potato')
+    # 2) Пытаемся выбрать 1 случайное видео из static/videos/memes/{username}
+    memes_dir = os.path.join(app.static_folder, 'videos', 'memes', username)
     try:
-        files = [f for f in os.listdir(dir_)
-                 if f.lower().endswith(('.mp4','.webm','.ogg'))]
-    except:
-        files = []
-    return jsonify(files)
+        vids = [
+            f for f in os.listdir(memes_dir)
+            if f.lower().endswith(('.mp4', '.webm', '.ogg'))
+        ]
+        video_file = random.choice(vids) if vids else None
+    except FileNotFoundError:
+        video_file = None
 
-@app.route('/team/le_potato')
-def le_potato():
-    return render_template('le_potato.html')
+    # 3) Собираем список posts
+    posts = []
+    for img in image_posts:
+        posts.append({
+            'type': 'image',
+            'src': url_for('static', filename=f'assets/{username}/posts/{img}')
+        })
+    if video_file:
+        posts.append({
+            'type': 'video',
+            'src': url_for('static', filename=f'videos/memes/{username}/{video_file}')
+        })
+
+    # 4) Перемешиваем порядок
+    random.shuffle(posts)
+
+    # Рендерим шаблон username_v2.html
+    return render_template(
+        f'{username}_v2.html',
+        username=data['name'],
+        profile_data=data,
+        posts=posts
+    )
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=25577)
+    app.run(debug=True, host='0.0.0.0', port=25577)
