@@ -319,7 +319,7 @@ audio { display:none; }
   transform: translateX(-50%);
   color: #bd87fa;
   font-family: 'Minecraft', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 1.3rem;
   letter-spacing: 1px;
   opacity: 0.77;
   text-shadow: 1px 1px 3px #000a;

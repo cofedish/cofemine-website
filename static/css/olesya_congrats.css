@@ -93,12 +93,7 @@ html, body {
   object-fit:contain;
 }
 
-/* ==== Сундук ==== */
-.chest {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-200%);
-  width:128px; opacity:0; cursor:pointer;
-}
+
 .fly-in {
   animation: flyInChest 0.8s cubic-bezier(.6,-0.2,.4,1.5) forwards;
 }
@@ -214,3 +209,4 @@ html, body {
   display:inline-block;
   text-shadow:0 1px 2px #522338cc;
 }
+
