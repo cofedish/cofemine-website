@@ -81,7 +81,7 @@ def beetwin():
                 flash('Неверный пароль, попробуйте ещё раз.')
         return render_template('olesya_login.html')
     else:
-        return render_template('beetwin_special.html')
+        return render_template('beetwin_special.html', minekey = os.getenv("MINEKEY", "HUY TEBE"))
 
 @app.route('/team/<username>')
 def profile(username):
