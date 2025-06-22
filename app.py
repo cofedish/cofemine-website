@@ -1,6 +1,7 @@
 import os
 import random
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
+from functools import lru_cache
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET')
@@ -77,6 +78,17 @@ PROFILES = {
     }
 }
 
+@lru_cache()
+def get_memes_for_user(username):
+    memes_dir = os.path.join(app.static_folder, 'videos', 'memes', username)
+    try:
+        return [
+            f for f in os.listdir(memes_dir)
+            if f.lower().endswith(('.mp4', '.webm', '.ogg'))
+        ]
+    except FileNotFoundError:
+        return []
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -110,19 +122,10 @@ def profile(username):
         abort(404)
     data = PROFILES[username]
 
-    # 1) Выбираем 2 случайные картинки из photos
     image_posts = random.sample(data['photos'], 2)
 
-    # 2) Пытаемся выбрать 1 случайное видео из static/videos/memes/{username}
-    memes_dir = os.path.join(app.static_folder, 'videos', 'memes', username)
-    try:
-        vids = [
-            f for f in os.listdir(memes_dir)
-            if f.lower().endswith(('.mp4', '.webm', '.ogg'))
-        ]
-        video_file = random.choice(vids) if vids else None
-    except FileNotFoundError:
-        video_file = None
+    vids = get_memes_for_user(username)
+    video_file = random.choice(vids) if vids else None
 
     # 3) Собираем список posts
     posts = []
@@ -149,4 +152,4 @@ def profile(username):
     )
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=25577)
+    app.run(host='0.0.0.0', port=25577)
