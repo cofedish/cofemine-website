@@ -1,47 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контакты - CofeMine</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+  <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Контакты — CofeMine</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contacts.css') }}">
 </head>
 <body>
-    <!-- Фиксированное меню -->
-    <div class="sticky-menu">
-        <h1><a href="/">CofeMine</a></h1>
+  <!-- Фиксированное меню -->
+  <div class="sticky-menu">
+    <h1><a href="{{ url_for('home') }}">CofeMine</a></h1>
+  </div>
+
+  <!-- Страница контактов -->
+  <section class="contacts">
+    <h2>📬 Свяжитесь с нами</h2>
+    <div class="contacts-grid">
+      <a href="https://vk.com/cofedish" class="contact-card vk" target="_blank">
+        <img src="{{ url_for('static',filename = 'img/vk-icon.png') }}" alt="VK">
+        <h3>ВКонтакте</h3>
+        <p>Напишите нам в ВК</p>
+      </a>
+      <a href="https://t.me/COFEDISH" class="contact-card tg" target="_blank">
+        <img src="{{ url_for('static',filename = 'img/telegram-icon.png') }}" alt="Telegram">
+        <h3>Telegram</h3>
+        <p>Напишите нам в телеграм</p>
+      </a>
+      <a href="https://discord.gg/vPuRkNMxmw" class="contact-card dc" target="_blank">
+        <img src="{{ url_for('static',filename = 'img/discord-icon.png') }}" alt="Discord">
+        <h3>Discord</h3>
+        <p>Присоединяйтесь к нашему серверу</p>
+      </a>
+      <a href="https://github.com/cofedish" class="contact-card gh" target="_blank">
+        <img src="{{ url_for('static',filename = 'img/github-icon.png') }}" alt="GitHub">
+        <h3>GitHub</h3>
+        <p>Посмотрите наш код</p>
+      </a>
     </div>
+  </section>
 
-    <!-- Контакты -->
-    <section class="contacts">
-        <h2>Свяжитесь с нами</h2>
-        <div class="contacts-container">
-            <a href="https://vk.com/cofedish" class="contact-card" target="_blank">
-                <img src="/static/img/vk-icon.png" alt="VK">
-                <h3>ВКонтакте</h3>
-                <p>Напишите нам в ВК</p>
-            </a>
-            <a href="https://t.me/COFEDISH" class="contact-card" target="_blank">
-                <img src="/static/img/telegram-icon.png" alt="Telegram">
-                <h3>Telegram</h3>
-                <p>Напишите нам в телеграм</p>
-            </a>
-            <a href="https://discord.gg/dyCDxXsnA7" class="contact-card" target="_blank">
-                <img src="/static/img/discord-animation.gif" alt="Discord">
-                <h3>Discord</h3>
-                <p>Присоединяйтесь к нашему серверу</p>
-            </a>
-            <a href="https://github.com/cofedish" class="contact-card" target="_blank">
-                <img src="/static/img/github-icon.png" alt="GitHub">
-                <h3>GitHub</h3>
-                <p>Посмотрите наш код</p>
-            </a>
-        </div>
-    </section>
-
-    <!-- Подвал -->
-    <footer>
-        <p>© 2024 CofeMine. Все права защищены Беккелем. <a href="/">На главную</a></p>
-    </footer>
+  <!-- Подвал -->
+  <footer class="footer">
+    <p>© 2025 CofeMine. Все права защищены Беккелем. <a href="{{ url_for('home') }}">На главную</a></p>
+  </footer>
 </body>
 </html>

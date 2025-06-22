@@ -1,0 +1,117 @@
+/* contacts_v3.css */
+
+/* 1) Цветовая палитра */
+:root {
+  --coffee-dark:   #4a2e0b;
+  --coffee-medium: #8c5e29;
+  --coffee-light:  #f5e1c7;
+  --beige-bg:      #faf7f4;
+  --text-dark:     #3b2c1a;
+  --text-light:    #76614a;
+}
+
+/* 2) Базовые стили */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: var(--beige-bg) fixed center/cover no-repeat;
+  color: var(--text-dark);
+}
+
+/* 3) Меню и подвал */
+.sticky-menu, .footer {
+  background: var(--coffee-dark);
+  color: var(--beige-bg);
+  text-align: center;
+}
+.sticky-menu h1, .footer p {
+  margin: 0;
+  padding: 12px;
+}
+.sticky-menu a, .footer a {
+  color: var(--coffee-light);
+  text-decoration: none;
+}
+
+/* 4) Контейнер контактов */
+.contacts {
+  padding: 100px 20px 40px; /* учтём высоту меню */
+  text-align: center;
+}
+.contacts h2 {
+  font-size: 2.5rem;
+  margin-bottom: 32px;
+  color: var(--coffee-medium);
+  text-shadow: 1px 1px 0 var(--coffee-dark);
+}
+
+/* 5) Сетка карточек */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 6) Карточки */
+.contact-card {
+  background: var(--coffee-light);
+  border: 3px solid var(--coffee-medium);
+  border-radius: 8px;
+  padding: 20px;
+  text-decoration: none;
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform .2s, box-shadow .2s;
+  /* фиксируем высоту, чтобы текст никогда не вылезал */
+  height: 260px;
+  box-sizing: border-box;
+}
+.contact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+/* 7) Иконка */
+.contact-card img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  /* легкая качка */
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0) }
+  50%     { transform: translateY(-6px) }
+}
+
+/* 8) Заголовок + текст */
+.contact-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+.contact-card p {
+  margin: 0;
+  font-size: .9rem;
+  color: var(--text-light);
+  /* перенос и предотвращение выхода за рамки */
+  text-align: center;
+  word-break: break-word;
+  overflow: hidden;
+  /* в 2 строки максимум */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* (опционально) если хочется разного оттенка для каждой карточки */
+.contact-card.vk { border-color: #97714c; }
+.contact-card.tg { border-color: #a2875f; }
+.contact-card.dc { border-color: #8c6e41; }
+.contact-card.gh { border-color: #6f583e; }
