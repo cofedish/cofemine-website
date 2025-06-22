@@ -19,6 +19,7 @@
         <h1>CofeMine</h1>
         <div class="buttons-container">
             <a href="https://github.com/cofedish/cofemine-sborka-client/releases/latest/download/cofemine-client.zip" class="button">Скачать сборку</a>
+            <a href="https://github.com/HMCL-dev/HMCL/releases/download/release-3.6.12/HMCL-3.6.12.exe" class="button">Скачать лаунчер</a>
         </div>
     </div>
 
@@ -29,6 +30,7 @@
       <h1>CofeMine</h1>
       <p>Добро пожаловать в конченый мир Minecraft!</p>
       <a id="download" href="https://github.com/cofedish/cofemine-sborka-client/releases/latest/download/cofemine-client.zip" class="button">Скачать сборку</a>
+        <a href="https://github.com/HMCL-dev/HMCL/releases/download/release-3.6.12/HMCL-3.6.12.exe" class="button">Скачать лаунчер</a>
     </div>
     </section>
 
@@ -86,11 +88,41 @@
         </div>
         <div class="why-us-card">
             <div class="card-image">
-                <img src="/static/img/vergil/bekkel.png" alt="Неведомая летающая хуйня v3.0">
+                <img src="/static/img/bekkel.png" alt="Неведомая летающая хуйня v3.0">
             </div>
             <div class="card-text">
                 <h3>Неведомая летающая хуйня v3.0</h3>
                 <p>Что это блять?</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-video">
+                <video autoplay loop muted>
+                    <source src="/static/videos/beholder.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            </div>
+            <div class="card-text">
+                <h3>Все под контролем (атвечаю)</h3>
+                <p>Никаких иноагентов на сервере, большой капитан 1984 конечно не следит за вами</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/progress.jpg" alt="Прогресс">
+            </div>
+            <div class="card-text">
+                <h3>Ахуевшая система прогресса</h3>
+                <p>Всмысле от говна до ядерки 300к в наносекунду за 48 секунд?</p>
+            </div>
+        </div>
+        <div class="why-us-card">
+            <div class="card-image">
+                <img src="/static/img/poebat.jpg" alt="Да поебать мне">
+            </div>
+            <div class="card-text">
+                <h3>Да поебать мне</h3>
+                <p>Да поебать мне ©Админ</p>
             </div>
         </div>
     </div>
@@ -124,7 +156,7 @@
         <!-- CofeDish -->
         <a href="{{ url_for('profile', username='cofedish') }}" class="team-member-link">
           <div class="team-member">
-            <img src="{{ url_for('static', filename='img/avatar-cofedish.png') }}" alt="COFEDISH">
+            <img src="{{ url_for('static', filename='assets/avatars/avatar-cofedish.png') }}" alt="COFEDISH">
             <h3>COFEDISH</h3>
             <p>DevOps курильщика, Сын докер контейнера</p>
           </div>
@@ -133,7 +165,7 @@
         <!-- Beetwin -->
         <a href="{{ url_for('beetwin') }}" class="team-member-link">
           <div class="team-member">
-            <img src="{{ url_for('static', filename='img/beetwin.png') }}" alt="Beetwin">
+            <img src="{{ url_for('static', filename='assets/avatars/avatar-beetwin.png') }}" alt="Beetwin">
             <h3>Beetwin</h3>
             <p>Большой босс, генератор 300к в наносекунду</p>
           </div>
@@ -142,7 +174,7 @@
         <!-- Беккель -->
         <a href="{{ url_for('profile', username='bekkel') }}" class="team-member-link">
           <div class="team-member">
-            <img src="{{ url_for('static', filename='img/bekkel.png') }}" alt="Беккель">
+            <img src="{{ url_for('static', filename='assets/avatars/avatar-bekkel.png') }}" alt="Беккель">
             <h3>Беккель</h3>
             <p>Отец неведомой летающей хуйни</p>
           </div>
@@ -151,9 +183,9 @@
         <!-- Le_Potato -->
         <a href="{{ url_for('profile', username='le_potato') }}" class="team-member-link">
           <div class="team-member">
-            <img src="{{ url_for('static', filename='img/demid.png') }}" alt="Le_Potato">
+            <img src="{{ url_for('static', filename='assets/avatars/avatar-le_potato.png') }}" alt="Le_Potato">
             <h3>Le_Potato</h3>
-            <p>Заслуженный 3d принтер России</p>
+            <p>Заслуженный 3D принтер России</p>
           </div>
         </a>
       </div>

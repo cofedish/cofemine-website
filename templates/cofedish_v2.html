@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
   <title>{{ username }}</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -13,12 +14,11 @@
   <div class="profile-container">
     <header class="profile-header">
       <img class="avatar"
-           src="{{ url_for('static', filename='assets/cofedish/' + profile_data.avatar) }}"
+           src="{{ url_for('static', filename='assets/avatars/' + profile_data.avatar) }}"
            alt="{{ username }} Avatar">
       <h1 class="username">{{ username }}</h1>
       <div class="actions">
-        <button class="btn btn-message">✉ Сообщение</button>
-        <button class="btn btn-more">☰ Ещё</button>
+        <a href="{{ url_for('home') }}" class="btn btn-back">← Назад</a>
       </div>
     </header>
 
@@ -38,7 +38,12 @@
           <h2>Друзья</h2>
           <div class="friends-grid">
             {% for friend in profile_data.friends %}
-              <img src="{{ url_for('static', filename='assets/cofedish/' + friend) }}" alt="">
+              <a href="{{ url_for('profile', username=friend.username) }}">
+                <img
+                  src="{{ url_for('static', filename='assets/avatars/' + friend.avatar) }}"
+                  alt="{{ friend.username }} Avatar"
+                >
+              </a>
             {% endfor %}
           </div>
         </div>

@@ -15,12 +15,30 @@ PROFILES = {
             'photo4.png', 'photo5.png', 'photo6.png'
         ],
         'friends': [
-            'friend1.png', 'friend2.png',
-            'friend3.png'
+            {'username': 'beetwin', 'avatar': 'avatar-beetwin.png'},
+            {'username': 'bekkel', 'avatar': 'avatar-bekkel.png'},
+            {'username': 'le_potato', 'avatar': 'avatar-le_potato.png'}
         ],
         'subs': [
             'HuyOps', 'CICI/DIDI',
             'Bekkel', 'Idi Nahuy', 'Karpacho'
+        ]
+    },
+    'beetwin': {
+        'name': 'Beetwin',
+        'avatar': 'avatar-beetwin.png',
+        'photos': [
+            'photo1.png', 'photo2.png', 'photo3.png',
+            'photo4.png', 'photo5.png', 'photo6.png'
+        ],
+        'friends': [
+            {'username': 'cofedish', 'avatar': 'avatar-cofedish.png'},
+            {'username': 'bekkel', 'avatar': 'avatar-bekkel.png'},
+            {'username': 'le_potato', 'avatar': 'avatar-le_potato.png'}
+        ],
+        'subs': [
+            'Zavodiki', 'AE2pizdec',
+            '300k v ns', 'pizdec vkusnoye', 'Karpacho'
         ]
     },
     'bekkel': {
@@ -31,8 +49,9 @@ PROFILES = {
             'photo4.png', 'photo5.png', 'photo6.png'
         ],
         'friends': [
-            'friend1.png', 'friend2.png',
-            'friend3.png'
+            {'username': 'cofedish', 'avatar': 'avatar-cofedish.png'},
+            {'username': 'beetwin', 'avatar': 'avatar-beetwin.png'},
+            {'username': 'le_potato', 'avatar': 'avatar-le_potato.png'}
         ],
         'subs': [
             'YaEblan', 'Провоцирую', 'KaktusEnjoyers',
@@ -47,12 +66,13 @@ PROFILES = {
             'photo4.png', 'photo5.png', 'photo6.png'
         ],
         'friends': [
-            'friend1.png', 'friend2.png',
-            'friend3.png'
+            {'username': 'cofedish', 'avatar': 'avatar-cofedish.png'},
+            {'username': 'bekkel', 'avatar': 'avatar-bekkel.png'},
+            {'username': 'beetwin', 'avatar': 'avatar-beetwin.png'}
         ],
         'subs': [
-            'ShulkerBox', 'PotionMasters',
-            'EndCity', 'ChorusFarm', 'DragonSlayers'
+            'Елда-Чекалда', '3Д брухтер',
+            'Ебать ЧПУ', 'Зачем?', 'Надо'
         ]
     }
 }
