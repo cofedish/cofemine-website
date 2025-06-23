@@ -101,7 +101,7 @@ def contacts():
 def team():
     return render_template('team.html')
 
-@app.route('/team/beetwin', methods=['GET','POST'])
+'''@app.route('/team/beetwin', methods=['GET','POST'])
 def beetwin():
     if not session.get('authenticated'):
         if request.method == 'POST':
@@ -114,6 +114,7 @@ def beetwin():
         return render_template('olesya_login.html')
     else:
         return render_template('beetwin_special.html', minekey = os.getenv("MINEKEY", "HUY TEBE"))
+'''
 
 @app.route('/team/<username>')
 def profile(username):
@@ -152,4 +153,4 @@ def profile(username):
     )
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=25577)
+    app.run(debug=True, host='0.0.0.0', port=25577)
