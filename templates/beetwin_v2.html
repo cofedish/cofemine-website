@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+  <title>{{ username }}</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/beetwin_v2.css') }}">
+</head>
+<body>
+  <div class="profile-container">
+    <header class="profile-header">
+      <img class="avatar"
+           src="{{ url_for('static', filename='assets/avatars/' + profile_data.avatar) }}"
+           alt="{{ username }} Avatar">
+      <h1 class="username">{{ username }}</h1>
+      <div class="actions">
+        <a href="{{ url_for('home') }}" class="btn btn-back">← Назад</a>
+      </div>
+    </header>
+
+    <section class="profile-content">
+      <aside class="sidebar">
+        <!-- Фото -->
+        <div class="card photos">
+          <h2>Фото</h2>
+          <div class="photos-grid">
+            {% for photo in profile_data.photos %}
+              <img src="{{ url_for('static', filename='assets/beetwin/' + photo) }}" alt="">
+            {% endfor %}
+          </div>
+        </div>
+        <!-- Друзья -->
+        <div class="card friends">
+          <h2>Друзья</h2>
+          <div class="friends-grid">
+            {% for friend in profile_data.friends %}
+              <a href="{{ url_for('profile', username=friend.username) }}">
+                <img
+                  src="{{ url_for('static', filename='assets/avatars/' + friend.avatar) }}"
+                  alt="{{ friend.username }} Avatar"
+                >
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+        <!-- Подписки -->
+        <div class="card subs">
+          <h2>Подписки</h2>
+          <ul>
+            {% for sub in profile_data.subs %}
+              <li>{{ sub }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </aside>
+
+      <main class="posts">
+        <div class="posts-header card">
+          <h2>Все посты</h2>
+        </div>
+        <div class="post-list">
+          {% for post in posts %}
+            {% if post.type == 'image' %}
+              <div class="card post">
+                <img src="{{ post.src }}" alt="Post Image">
+              </div>
+            {% elif post.type == 'video' %}
+              <div class="card post">
+                <video controls loop>
+                  <source src="{{ post.src }}">
+                  Ваш браузер не поддерживает видео.
+                </video>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('video').forEach(function(v) {
+        v.muted = false;
+        v.volume = 0.05;
+      });
+    });
+  </script>
+</body>
+</html>
