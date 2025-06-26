@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Копируем дефолтные static/ и templates/ в отдельную директорию
-COPY cofemine-website/static/ /defaults/static/
-COPY cofemine-website/templates/ /defaults/templates/
+COPY ./static/ /defaults/static/
+COPY ./templates/ /defaults/templates/
 
 # Копируем остальной проект (включая Flask-приложение, requirements.txt и т.д.)
 COPY . .
