@@ -1,7 +1,8 @@
 import os
 import random
-from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort, jsonify
 from functools import lru_cache
+from mcstatus import JavaServer
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET')
@@ -77,6 +78,24 @@ PROFILES = {
         ]
     }
 }
+
+@app.route("/api/status")
+def status():
+    try:
+        server = JavaServer.lookup("cofemine.online")
+        status = server.status()
+        return jsonify({
+            "online": True,
+            "players": status.players.online,
+            "max": status.players.max,
+            "version": status.version.name
+        })
+    except Exception as e:
+        return jsonify({
+            "online": False,
+            "error": str(e)
+        })
+
 
 @lru_cache()
 def get_memes_for_user(username):

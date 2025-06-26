@@ -50,43 +50,47 @@ document.addEventListener('DOMContentLoaded', () => {
     video.load();
   }
 
-  // 4) Проверяем статус сервера (один раз, сразу после загрузки)
-  async function updateServerStatus() {
-    try {
-      const res       = await fetch('/api/status');
-      const { online } = await res.json();
-      const indicator = document.querySelector('.status__indicator');
-      const textEl    = document.querySelector('.status__text');
-      if (indicator && textEl) {
-        if (online) {
-          indicator.style.background = 'green';
-          textEl.textContent = 'Сервер онлайн';
-        } else {
-          indicator.style.background = 'red';
-          textEl.textContent = 'Сервер оффлайн';
-        }
-      }
-    } catch (e) {
-      console.error('Не удалось получить статус сервера:', e);
-    }
-  }
-  updateServerStatus();
+    // 4) Проверяем статус сервера (периодически)
+   async function updateServerStatus() {
+     try {
+       const res       = await fetch('/api/status');
+       const data      = await res.json();
+       const indicator = document.querySelector('.status-indicator');
+       const textEl    = document.querySelector('.status-text');
+       if (indicator && textEl) {
+         if (data.online) {
+           indicator.style.background = 'green';
+           textEl.textContent = `Сервер онлайн (${data.players}/${data.max})`;
+         } else {
+           indicator.style.background = 'red';
+           textEl.textContent = 'Сервер оффлайн';
+         }
+       }
+     } catch (e) {
+       console.error('Не удалось получить статус сервера:', e);
+     }
+   }
+
+    // Сразу при загрузке
+    updateServerStatus();
+
+    // И каждые 30 секунд
+    setInterval(updateServerStatus, 5000);
+
 
   // 5) Фоновая музыка
   const music = document.getElementById('background-music');
   if (music) {
-    music.volume = 0.1;  // 50%
+    music.volume = 0.1;
   }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
   const content = document.querySelector('.welcome-content');
   if (content) {
-    // на следующем кадре включаем анимацию
     requestAnimationFrame(() => {
       content.classList.add('visible');
     });
   }
-  // …остальной код…
 });
 
