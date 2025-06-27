@@ -30,7 +30,12 @@
 
       <!-- WELCOME SCREEN -->
     <section id="welcome" class="welcome-screen">
-    <video id="bg-video" class="welcome-screen__video" autoplay muted loop playsinline></video>
+    <video
+       id="bg-video"
+       class="welcome-screen__video"
+       poster="{{ url_for('static', filename='img/poster.png') }}"
+       autoplay muted loop playsinline
+    ></video>
     <div class="welcome-content">
       <h1>CofeMine</h1>
       <p>Добро пожаловать в конченый мир Minecraft!</p>

@@ -126,3 +126,94 @@ body {
   border-radius: 6px;
   display: block;
 }
+/* Медиазапрос для планшетов (до 768px) */
+@media (max-width: 768px) {
+  .profile-container {
+    margin: 20px 15px;
+    border-radius: 10px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 10px;
+  }
+
+  .username {
+    margin: 15px 0;
+    font-size: 24px;
+  }
+
+  .actions {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .profile-content {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .posts {
+    margin-left: 0;
+  }
+}
+
+/* Медиазапрос для смартфонов (до 480px) */
+@media (max-width: 480px) {
+  body {
+    background-attachment: fixed;
+    background-size: auto 100%;
+  }
+
+  .profile-container {
+    margin: 10px;
+    border-radius: 8px;
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .username {
+    font-size: 20px;
+  }
+
+  .btn {
+    padding: 8px 10px;
+    font-size: 10px;
+    flex: 1 0 40%;
+  }
+
+  .photos-grid,
+  .friends-grid {
+    grid-auto-rows: 70px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .post {
+    padding: 10px;
+  }
+
+  .posts-header h2 {
+    font-size: 18px;
+  }
+
+  .post-content {
+    font-size: 12px;
+  }
+}

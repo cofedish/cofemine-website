@@ -2,8 +2,9 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #faf7f4; /* Светло-бежевый фон */
-    color: #5d4037;            /* Кофейный цвет текста */
+    background-color: #faf7f4;
+    color: #5d4037;
+    overflow-x: hidden; /* Запрет горизонтального скролла */
 }
 
 #audio {
@@ -429,4 +430,241 @@ footer a {
 .team-member-link h3,
 .team-member-link p {
   color: inherit;
+}
+
+/* ==================== АДАПТИВ ДЛЯ МОБИЛОК ==================== */
+@media (max-width: 1024px) {
+.team-member {
+    background-color: #fef8f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 180px;
+    max-height: 230px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+}
+
+
+@media (max-width: 1000px) {
+    /* Фиксированное меню */
+    .sticky-menu {
+        flex-direction: column;
+        padding: 10px;
+        text-align: center;
+    }
+    .sticky-menu .buttons-container {
+        flex-direction: column;
+        gap: 8px;
+        margin: 10px 0 0;
+        width: 90%;
+        align-items: center;
+    }
+    .sticky-menu .button {
+        width: 90%;
+        padding: 8px 16px;
+        box-sizing: border-box;
+        font-size: 1rem;
+    }
+
+    /* Приветственный экран */
+    .welcome-content h1 {
+        font-size: 4.5rem;
+        margin: 0 15px 10px;
+    }
+    .welcome-content p {
+        font-size: 1.5rem;
+        margin: 0 15px 20px;
+    }
+    .welcome-content .button {
+        padding: 12px 20px;
+        font-size: 1.5rem;
+        margin: 0 5px 10px;
+        display: block;
+    }
+
+    /* Почему мы? */
+    .why-us-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .why-us-card {
+        width: 90%;
+        height: auto;
+    }
+
+    /* Адрес сервера */
+    .server-card {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .server-info {
+        padding: 10px 0;
+        text-align: center;
+
+    }
+    .server-info p {
+        font-size: 2rem;
+    }
+    .server-status {
+        justify-content: center;
+
+    }
+    .server-image {
+        margin-top: 15px;
+    }
+
+    /* Наша команда */
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .team-member {
+        min-width: 400px;
+        min-height: auto;
+    }
+    .team-member h3 {
+        min-height: auto;
+    }
+
+    /* Контакты */
+    .contacts-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .contact-card {
+        width: 90%;
+        max-width: none;
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* Фиксированное меню */
+    .sticky-menu {
+        width: 97.335%;
+        flex-direction: column;
+        padding: 10px;
+        text-align: center;
+    }
+    .sticky-menu .buttons-container {
+        flex-direction: column;
+        gap: 8px;
+        margin: 10px 0 0;
+        width: 100%;
+        align-items: center;
+    }
+    .sticky-menu .button {
+        width: 90%;
+        padding: 8px 16px;
+        box-sizing: border-box;
+    }
+
+    /* Приветственный экран */
+    .welcome-content h1 {
+        font-size: 3.5rem;
+        margin: 0 15px 10px;
+    }
+    .welcome-content p {
+        font-size: 1.2rem;
+        margin: 0 15px 20px;
+    }
+    .welcome-content .button {
+        padding: 12px 20px;
+        font-size: 1rem;
+        margin: 0 5px 10px;
+        display: block;
+    }
+
+    /* Почему мы? */
+    .why-us-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .why-us-card {
+        width: 90%;
+        height: auto;
+    }
+
+    /* Адрес сервера */
+    .server-card {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .server-info {
+        padding: 10px 0;
+        text-align: center;
+    }
+    .server-info p {
+        font-size: 1.2rem;
+    }
+    .server-status {
+        justify-content: center;
+    }
+    .server-image {
+        margin-top: 15px;
+    }
+
+    /* Наша команда */
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .team-member {
+        width: 90%;
+        max-width: 300px
+        min-width: 300px;
+        min-height: auto;
+    }
+    .team-member h3 {
+        min-height: auto;
+    }
+
+    /* Контакты */
+    .contacts-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .contact-card {
+        width: 90%;
+        max-width: none;
+    }
+}
+
+/* Дополнительные адаптации для маленьких экранов */
+@media (max-width: 480px) {
+    .sticky-menu {
+        width: 95%;
+    }
+    .welcome-content h1 {
+        font-size: 3rem;
+    }
+    .welcome-content p {
+        font-size: 1rem;
+    }
+    .why-us h2,
+    .server-details h2,
+    .team h2,
+    .contacts h2 {
+        font-size: 2rem;
+    }
+
+    .team-member {
+        width: 90%;
+        max-width: 250px;
+        min-width: 250px;
+        min-height: auto;
+    }
+    .team-member h3 {
+        min-height: auto;
+    }
+
+    .server-info p {
+        font-size: 1rem;
+    }
+
+    .sticky-menu h1 {
+        font-size: 1.3rem;
+    }
 }
