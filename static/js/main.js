@@ -1,20 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1) Текст подскакивает в зависимости от фона
-  function updateTextColor() {
-    const content = document.querySelector('.welcome-content');
-    const bgColor = window.getComputedStyle(document.body).backgroundColor;
-    if (!content) return;
-
-    const rgb = bgColor.match(/\d+/g).map(Number);
-    const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-    content.style.color = brightness > 128 ? 'black' : 'white';
-  }
-  updateTextColor();
-
-  // 2) «Липкое» меню появляется при прокрутке ниже кнопки
-  const stickyMenu    = document.querySelector('.sticky-menu');
-  const launcherButton = document.querySelector('.welcome-content .button');
-  if (stickyMenu && launcherButton) {
+    const stickyMenu    = document.querySelector('.sticky-menu');
+    const launcherButton = document.querySelector('.welcome-content .button');
+    if (stickyMenu && launcherButton) {
     window.addEventListener('scroll', () => {
       const scrollY       = window.scrollY;
       const buttonBottom  = launcherButton.getBoundingClientRect().bottom + scrollY;
@@ -26,32 +13,32 @@ document.addEventListener('DOMContentLoaded', () => {
         stickyMenu.classList.remove('visible');
       }
     });
-  }
+    }
 
-  // 3) Подменяем источник фонового видео в зависимости от времени
-  const hour = new Date().getHours();
-  let src = '';
-  if (hour < 6) {
-    src = 'static/videos/night.webm';
-  } else if (hour < 9) {
-    src = 'static/videos/morning.webm';
-  } else if (hour < 12) {
-    src = 'static/videos/late_morning.webm';
-  } else if (hour < 17) {
-    src = 'static/videos/day.webm';
-  } else if (hour < 21) {
-    src = 'static/videos/evening.webm';
-  } else {
-    src = 'static/videos/late_night.webm';  // ← тут была опечатка
-  }
-  const video = document.getElementById('bg-video');
-  if (video) {
+    // 3) Подменяем источник фонового видео в зависимости от времени
+    const hour = new Date().getHours();
+    let src = '';
+    if (hour < 6) {
+    src = 'static/videos/compressed/night_compressed.webm';
+    } else if (hour < 9) {
+    src = 'static/videos/compressed/morning_compressed.webm';
+    } else if (hour < 12) {
+    src = 'static/videos/compressed/late_morning_compressed.webm';
+    } else if (hour < 17) {
+    src = 'static/videos/compressed/day_compressed.webm';
+    } else if (hour < 21) {
+    src = 'static/videos/compressed/evening_compressed.webm';
+    } else {
+    src = 'static/videos/compressed/late_night_compressed.webm';
+    }
+    const video = document.getElementById('bg-video');
+    if (video) {
     video.src = src;
     video.load();
-  }
+    }
 
     // 4) Проверяем статус сервера (периодически)
-   async function updateServerStatus() {
+    async function updateServerStatus() {
      try {
        const res       = await fetch('/api/status');
        const data      = await res.json();
@@ -69,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
      } catch (e) {
        console.error('Не удалось получить статус сервера:', e);
      }
-   }
+    }
 
     // Сразу при загрузке
     updateServerStatus();
@@ -78,11 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateServerStatus, 5000);
 
 
-  // 5) Фоновая музыка
-  const music = document.getElementById('background-music');
-  if (music) {
+    // 5) Фоновая музыка
+    const music = document.getElementById('background-music');
+    if (music) {
     music.volume = 0.1;
-  }
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
