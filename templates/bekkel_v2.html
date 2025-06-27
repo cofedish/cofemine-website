@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ username }}</title>
@@ -53,36 +54,115 @@
         </div>
       </aside>
 
-      <main class="posts">
-        <div class="posts-header card">
-          <h2>Все посты</h2>
-        </div>
-        <div class="post-list">
-          {% for post in posts %}
-            {% if post.type == 'image' %}
-              <div class="card post">
-                <img src="{{ post.src }}" alt="Post Image">
-              </div>
-            {% elif post.type == 'video' %}
-              <div class="card post">
-                <video controls loop>
-                  <source src="{{ post.src }}">
-                  Ваш браузер не поддерживает видео.
-                </video>
-              </div>
-            {% endif %}
+
+  <main class="posts">
+    <div class="posts-header card">
+      <h2>Все посты</h2>
+    </div>
+
+    {% set video_posts = posts | selectattr('type', 'equalto', 'video') | list %}
+    {% if video_posts %}
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          {% for post in video_posts %}
+            <div class="swiper-slide">
+              <video controls playsinline preload="metadata">
+                <source src="{{ post.src }}">
+                Ваш браузер не поддерживает видео.
+              </video>
+            </div>
           {% endfor %}
         </div>
-      </main>
-    </section>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    {% endif %}
+
+    <div class="post-list">
+      {% for post in posts %}
+        {% if post.type == 'image' %}
+          <div class="card post">
+            <img src="{{ post.src }}" alt="Post Image">
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </main>
+  </section>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('video').forEach(function(v) {
-        v.muted = false;    // если ранее стояло muted
-        v.volume = 0.05;     // 20% громкости
+    var swiper = new Swiper(".mySwiper", {
+      loop: false,
+      centeredSlides: true,
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      on: {
+        init: function () {
+          adjustSwiperHeight();
+        },
+        slideChangeTransitionEnd: function () {
+          adjustSwiperHeight();
+
+          // При смене слайда останавливаем все остальные
+          let videos = document.querySelectorAll(".swiper-slide video");
+          videos.forEach((v, i) => {
+            if (i !== this.realIndex) {
+              v.pause();
+              v.currentTime = 0;
+            }
+          });
+        }
+      }
+    });
+
+    function adjustSwiperHeight() {
+      const activeVideo = document.querySelector(".swiper-slide-active video");
+      const swiperContainer = document.querySelector(".mySwiper");
+      if (activeVideo && swiperContainer) {
+        if (activeVideo.readyState >= 1) {
+          resizeContainer();
+        } else {
+          activeVideo.addEventListener("loadedmetadata", resizeContainer);
+        }
+
+        function resizeContainer() {
+          const videoHeight = activeVideo.videoHeight;
+          const videoWidth = activeVideo.videoWidth;
+
+          if (videoHeight && videoWidth) {
+            const scale = 632 / videoWidth;
+            let newHeight = videoHeight * scale;
+
+            // Ограничиваем максимальную высоту
+            if (newHeight > 900) {
+              newHeight = 900;
+            }
+
+            swiperContainer.style.height = newHeight + "px";
+          }
+        }
+      }
+    }
+
+    // При первом воспроизведении ставим громкость
+    document.querySelectorAll(".swiper-slide video").forEach((video) => {
+      video.addEventListener("play", function () {
+        video.volume = 0.1;
       });
     });
+
+    // При загрузке страницы подгоняем размер
+    window.addEventListener("load", adjustSwiperHeight);
   </script>
 </body>
 </html>

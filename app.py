@@ -145,20 +145,26 @@ def profile(username):
     image_posts = random.sample(data['photos'], 2)
 
     vids = get_memes_for_user(username)
-    video_file = random.choice(vids) if vids else None
+    video_posts = [
+        {
+            'type': 'video',
+            'src': url_for('static', filename=f'videos/memes/{username}/{v}')
+        }
+        for v in vids
+    ]
+
+    # Склеиваем и перемешиваем
+    posts = image_posts + video_posts
+    random.shuffle(posts)
 
     # 3) Собираем список posts
-    posts = []
+    posts = image_posts + video_posts
     for img in image_posts:
         posts.append({
             'type': 'image',
             'src': url_for('static', filename=f'assets/{username}/posts/{img}')
         })
-    if video_file:
-        posts.append({
-            'type': 'video',
-            'src': url_for('static', filename=f'videos/memes/{username}/{video_file}')
-        })
+
 
     # 4) Перемешиваем порядок
     random.shuffle(posts)

@@ -217,3 +217,105 @@ body {
     font-size: 12px;
   }
 }
+/* === ШОРТСЫ (горизонтальный слайдер) === */
+.shorts-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.shorts-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.shorts-slider::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.shorts-item {
+  flex: 0 0 250px;
+  scroll-snap-align: start;
+  border: 2px solid #54b883;
+  border-radius: 8px;
+  background: rgba(242, 255, 248, 0.9);
+  padding: 6px;
+}
+
+.shorts-item video {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.mySwiper {
+  width: 632px;
+  margin: 0 auto 30px;
+  border: 2px solid #7fa8c9;
+  border-radius: 10px;
+  background: rgba(255,255,255, 0.9);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-slide video {
+  max-width: 100%;
+  max-height: 900px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Адаптация под планшеты и смартфоны */
+@media (max-width: 768px) {
+  .mySwiper {
+    width: 100%;
+    max-height: 600px
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}
+/* Цвет стрелок */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #7fa8c9;
+}
+
+/* При наведении */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #7fa8c9;
+}
+
+/* Скрытие стрелок на телефонах */
+@media (max-width: 768px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mySwiper {
+    width: 100%;
+  }
+
+  .swiper-slide video {
+    max-height: 60vh; /* На телефонах ограничим 60% высоты экрана */
+  }
+}
