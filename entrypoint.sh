@@ -15,5 +15,6 @@ copy_if_empty() {
 
 copy_if_empty "/defaults/static" "/app/static"
 copy_if_empty "/defaults/templates" "/app/templates"
+copy_if_empty "/defaults/static/img" "/app/static/img"
 
 exec "$@"

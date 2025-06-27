@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Копируем дефолтные static/ и templates/ в отдельную директорию
 COPY ./static/ /defaults/static/
 COPY ./templates/ /defaults/templates/
+COPY ./static/img/ /defaults/static/img/
 
 # Копируем остальной проект (включая Flask-приложение, requirements.txt и т.д.)
 COPY . .
