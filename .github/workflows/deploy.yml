@@ -66,17 +66,24 @@ jobs:
           path: build/
 
       - name: Setup SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 700 ~/.ssh
+
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          # Add known hosts (if provided) or disable strict checking for first run
-          if [ -n "${{ secrets.DEPLOY_KNOWN_HOSTS }}" ]; then
-            echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          # Add known hosts - use secret if provided, otherwise scan
+          if [ -n "$KNOWN_HOSTS" ]; then
+            echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           else
-            echo "StrictHostKeyChecking accept-new" >> ~/.ssh/config
+            ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
           fi
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Create release directory
         env:
@@ -181,12 +188,23 @@ jobs:
 
     steps:
       - name: Setup SSH
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
+          set -e
           mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts 2>/dev/null || true
-          echo "StrictHostKeyChecking accept-new" >> ~/.ssh/config
+
+          # known_hosts: лучше секретом (пиннинг ключа), но можно и keyscan
+          if [ -n "${{ secrets.DEPLOY_KNOWN_HOSTS }}" ]; then
+            echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          fi
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Rollback to previous release
         env:
