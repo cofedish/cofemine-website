@@ -26,9 +26,14 @@ echo "Target: $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/shared"
 echo ""
 
 # Check if directories exist
-if [ ! -d "public/videos" ] && [ ! -d "public/audio" ] && [ ! -d "public/assets" ]; then
+if [ ! -d "public/videos" ] && [ ! -d "public/audio" ] && [ ! -d "public/assets" ] && [ ! -d "public/data" ]; then
     echo "Error: No media directories found in public/"
     exit 1
+fi
+
+# Warn if manifest is missing
+if [ ! -f "public/data/media.json" ]; then
+    echo "Warning: public/data/media.json not found. Run npm run generate-media first."
 fi
 
 # Create shared directory on server
@@ -45,10 +50,12 @@ else
 fi
 
 # Sync each media directory
-for dir in videos audio assets; do
+for dir in videos audio assets data; do
     if [ -d "public/$dir" ]; then
         echo ""
         echo "Syncing $dir..."
+
+        ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST "mkdir -p $DEPLOY_PATH/shared/$dir"
 
         if [ "$SYNC_CMD" = "rsync" ]; then
             rsync -avz --progress \
@@ -85,6 +92,14 @@ ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST << EOF
                 echo "Linked: \$RELEASE_DIR/\$dir -> ../../shared/\$dir"
             fi
         done
+
+        if [ -f shared/data/media.json ]; then
+            rm -rf \$RELEASE_DIR/data 2>/dev/null || true
+            ln -sfn ../../shared/data \$RELEASE_DIR/data
+            echo "Linked: \$RELEASE_DIR/data -> ../../shared/data"
+        else
+            echo "Skipping shared/data symlink (media.json not found)"
+        fi
     else
         echo "Warning: current directory doesn't exist yet (run deploy first)"
     fi

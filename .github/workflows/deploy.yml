@@ -33,9 +33,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate media manifest
-        run: npm run generate-media
-
       - name: Build production bundle
         if: ${{ !inputs.skip_build }}
         run: npm run build
@@ -136,6 +133,17 @@ jobs:
             # Note: symlinks need ../../shared because current -> releases/<name>/
             # so from releases/<name>/, we need ../.. to get back to DEPLOY_PATH
             for dir in videos audio assets data; do
+              if [ "\$dir" = "data" ]; then
+                if [ -f shared/data/media.json ]; then
+                  rm -rf releases/${{ env.RELEASE_NAME }}/data 2>/dev/null || true
+                  ln -sfn ../../shared/data releases/${{ env.RELEASE_NAME }}/data
+                  echo "Linked shared/data"
+                else
+                  echo "Skipping shared/data (media.json not found)"
+                fi
+                continue
+              fi
+
               if [ -d shared/\$dir ]; then
                 rm -rf releases/${{ env.RELEASE_NAME }}/\$dir 2>/dev/null || true
                 ln -sfn ../../shared/\$dir releases/${{ env.RELEASE_NAME }}/\$dir
