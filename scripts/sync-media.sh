@@ -1,6 +1,8 @@
 #!/bin/bash
 # Sync media files directly to server (bypassing Git)
 # Usage: ./scripts/sync-media.sh
+#
+# Works with both rsync (preferred) and scp (fallback)
 
 set -e
 
@@ -10,7 +12,14 @@ DEPLOY_PORT="${DEPLOY_PORT:-22}"
 DEPLOY_USER="${DEPLOY_USER:-deploy}"
 DEPLOY_PATH="${DEPLOY_PATH:-/srv/html/cofemine}"
 
+# SSH key (optional - if not using default)
+SSH_KEY="${SSH_KEY:-}"
+
+# Build SSH options
 SSH_OPTS="-p $DEPLOY_PORT"
+if [ -n "$SSH_KEY" ]; then
+    SSH_OPTS="$SSH_OPTS -i $SSH_KEY"
+fi
 
 echo "=== Media Sync Script ==="
 echo "Target: $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/shared"
@@ -26,22 +35,40 @@ fi
 echo "Creating shared directory..."
 ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST "mkdir -p $DEPLOY_PATH/shared"
 
+# Check if rsync is available
+if command -v rsync &> /dev/null; then
+    echo "Using rsync..."
+    SYNC_CMD="rsync"
+else
+    echo "rsync not found, using scp (slower, no delta sync)..."
+    SYNC_CMD="scp"
+fi
+
 # Sync each media directory
 for dir in videos audio assets; do
     if [ -d "public/$dir" ]; then
         echo ""
         echo "Syncing $dir..."
-        rsync -avz --progress \
-            -e "ssh $SSH_OPTS" \
-            "public/$dir/" \
-            "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/shared/$dir/"
+
+        if [ "$SYNC_CMD" = "rsync" ]; then
+            rsync -avz --progress \
+                -e "ssh $SSH_OPTS" \
+                "public/$dir/" \
+                "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/shared/$dir/"
+        else
+            # scp fallback - recursive copy
+            # First create target dir
+            ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST "mkdir -p $DEPLOY_PATH/shared/$dir"
+            # Then copy
+            scp -r $SSH_OPTS "public/$dir/"* "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/shared/$dir/"
+        fi
     fi
 done
 
 echo ""
 echo "=== Creating symlinks in current release ==="
 
-# Create symlinks (this will be done automatically by deploy script too)
+# Create symlinks
 ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST << EOF
     cd $DEPLOY_PATH
 
@@ -49,9 +76,7 @@ ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST << EOF
     if [ -L current ] || [ -d current ]; then
         for dir in videos audio assets; do
             if [ -d shared/\$dir ]; then
-                # Remove existing dir/symlink in current
                 rm -rf current/\$dir 2>/dev/null || true
-                # Create symlink
                 ln -sfn ../shared/\$dir current/\$dir
                 echo "Linked: current/\$dir -> shared/\$dir"
             fi
@@ -63,6 +88,3 @@ EOF
 
 echo ""
 echo "=== Done! ==="
-echo ""
-echo "Media files are now on the server in: $DEPLOY_PATH/shared/"
-echo "They are symlinked into the current release."
