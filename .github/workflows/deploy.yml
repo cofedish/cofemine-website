@@ -1,0 +1,217 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: 'Skip build step (deploy existing build)'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '20'
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/srv/html/cofemine' }}
+  RELEASES_TO_KEEP: 3
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate media manifest
+        run: npm run generate-media
+
+      - name: Build production bundle
+        if: ${{ !inputs.skip_build }}
+        run: npm run build
+        env:
+          CI: false  # Ignore warnings as errors
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: build/
+          retention-days: 7
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: build/
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Add known hosts (if provided) or disable strict checking for first run
+          if [ -n "${{ secrets.DEPLOY_KNOWN_HOSTS }}" ]; then
+            echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          else
+            echo "StrictHostKeyChecking accept-new" >> ~/.ssh/config
+          fi
+
+      - name: Create release directory
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          RELEASE_NAME="$(date +%Y%m%d_%H%M%S)_${GITHUB_SHA:0:7}"
+          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+
+          ssh -i ~/.ssh/deploy_key -p $SSH_PORT $SSH_USER@$SSH_HOST << EOF
+            mkdir -p ${{ env.DEPLOY_PATH }}/releases/$RELEASE_NAME
+            mkdir -p ${{ env.DEPLOY_PATH }}/shared
+          EOF
+
+      - name: Deploy with rsync
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            build/ \
+            $SSH_USER@$SSH_HOST:${{ env.DEPLOY_PATH }}/releases/${{ env.RELEASE_NAME }}/
+
+      - name: Atomic symlink switch
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p $SSH_PORT $SSH_USER@$SSH_HOST << EOF
+            cd ${{ env.DEPLOY_PATH }}
+
+            # Atomic symlink update using temp link
+            ln -sfn releases/${{ env.RELEASE_NAME }} current_new
+            mv -Tf current_new current
+
+            echo "Deployed release: ${{ env.RELEASE_NAME }}"
+
+            # Link shared media directories (videos, audio, assets)
+            for dir in videos audio assets data; do
+              if [ -d shared/\$dir ]; then
+                rm -rf current/\$dir 2>/dev/null || true
+                ln -sfn ../shared/\$dir current/\$dir
+                echo "Linked shared/\$dir"
+              fi
+            done
+          EOF
+
+      - name: Cleanup old releases
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p $SSH_PORT $SSH_USER@$SSH_HOST << EOF
+            cd ${{ env.DEPLOY_PATH }}/releases
+
+            # Keep only last N releases
+            ls -t | tail -n +$((${RELEASES_TO_KEEP} + 1)) | xargs -r rm -rf
+
+            echo "Remaining releases:"
+            ls -la
+          EOF
+
+      - name: Healthcheck
+        run: |
+          echo "Waiting for deployment to propagate..."
+          sleep 5
+
+          for i in {1..3}; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://cofemine.ru || echo "000")
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "Healthcheck passed! Site returns 200 OK"
+              exit 0
+            fi
+            echo "Attempt $i: HTTP $HTTP_STATUS, retrying in 5s..."
+            sleep 5
+          done
+
+          echo "Healthcheck failed after 3 attempts"
+          exit 1
+
+      - name: Notify on failure (rollback hint)
+        if: failure()
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          echo "::warning::Deploy may have failed. To rollback, SSH to server and run:"
+          echo "cd ${{ env.DEPLOY_PATH }} && ls releases/ && ln -sfn releases/PREVIOUS_RELEASE current"
+
+  rollback:
+    name: Rollback (manual)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && failure()
+    needs: deploy
+    environment: production
+
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts 2>/dev/null || true
+          echo "StrictHostKeyChecking accept-new" >> ~/.ssh/config
+
+      - name: Rollback to previous release
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p $SSH_PORT $SSH_USER@$SSH_HOST << 'EOF'
+            cd ${{ env.DEPLOY_PATH }}/releases
+
+            # Get current release
+            CURRENT=$(readlink -f ../current | xargs basename)
+
+            # Get previous release
+            PREVIOUS=$(ls -t | grep -v "^${CURRENT}$" | head -1)
+
+            if [ -z "$PREVIOUS" ]; then
+              echo "No previous release found for rollback"
+              exit 1
+            fi
+
+            echo "Rolling back from $CURRENT to $PREVIOUS"
+            cd ..
+            ln -sfn releases/$PREVIOUS current_new
+            mv -Tf current_new current
+
+            echo "Rollback complete!"
+          EOF

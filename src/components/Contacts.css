@@ -1,0 +1,80 @@
+/* Contacts.css */
+.sticky-menu {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--bg-color-default);
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  z-index: 100;
+  border-bottom: 1px solid var(--secondary-default);
+}
+.sticky-menu.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.sticky-menu h1 {
+  margin: 0;
+}
+.sticky-menu .logo {
+  height: 60px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.contacts {
+  padding: 80px 20px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.contacts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: 20px;
+  border: 2px solid var(--secondary-default);
+  border-radius: 8px;
+  background: var(--bg-color-default);
+  transition: transform 0.2s;
+}
+.contact-card:hover {
+  transform: translateY(-4px);
+}
+.contact-card img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+}
+.contact-card.vk {
+  border-color: #4a76a8;
+}
+.contact-card.tg {
+  border-color: #0088cc;
+}
+.contact-card.dc {
+  border-color: #7289da;
+}
+.contact-card.gh {
+  border-color: #333;
+}
+
+/* Подвал */
+footer {
+    background-color: #5d4037;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer a {
+    color: #f1e3db;
+    text-decoration: none;
+}

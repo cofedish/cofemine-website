@@ -1,0 +1,41 @@
+{
+  "cofedish": {
+    "name": "Cofedish",
+    "avatar": "/assets/avatars/avatar-cofedish.png",
+    "subs": [
+      "HuyOps",
+      "CICI/DIDI",
+      "Bekkel",
+      "Idi Nahuy",
+      "Karpacho"
+    ],
+    "friends": [
+      {
+        "username": "bekkel",
+        "avatar": "/assets/avatars/avatar-bekkel.png"
+      }
+    ],
+    "photos": [],
+    "videos": []
+  },
+  "bekkel": {
+    "name": "Bekkel",
+    "avatar": "/assets/avatars/avatar-bekkel.png",
+    "subs": [
+      "YaEblan",
+      "Провоцирую",
+      "KaktusEnjoyers",
+      "#АлисаСтой",
+      "Helicopter",
+      "Baracopter"
+    ],
+    "friends": [
+      {
+        "username": "cofedish",
+        "avatar": "/assets/avatars/avatar-cofedish.png"
+      }
+    ],
+    "photos": [],
+    "videos": []
+  }
+}
