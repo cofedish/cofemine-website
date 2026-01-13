@@ -32,25 +32,25 @@ const DEVELOPERS = {
   cofedish: {
     name: 'Cofedish',
     role: 'DevOps Engineer',
-    bio: 'DevOps, Сын докер контейнера. Автоматизирую всё что движется.',
+    bio: 'DevOps, Сын докер контейнера. Мне завтра на работу какого хуя я делаю это в 4 утра.',
     avatar: '/assets/avatars/avatar-cofedish.png',
     links: {
       github: 'https://github.com/cofedish',
       telegram: 'https://t.me/cofedish'
     },
-    subs: ['HuyOps', 'CICI/DIDI', 'Bekkel', 'Idi Nahuy', 'Karpacho'],
+    subs: ['DevPrikOps', 'CICI/DIDI', 'Bekkel', 'Idi Nahuy', 'ывфыавфы'],
     friends: [{ username: 'bekkel', avatar: '/assets/avatars/avatar-bekkel.png' }],
     theme: 'green'
   },
   bekkel: {
     name: 'Bekkel',
     role: 'Chaos Engineer',
-    bio: 'Отец неведомой летающей хуйни. Создаю хаос и разрушение.',
+    bio: 'Отец неведомой летающей хуйни. Я конченый, бегите',
     avatar: '/assets/avatars/avatar-bekkel.png',
     links: {
-      telegram: 'https://t.me/bekkel'
+      telegram: 'https://t.me/argis01'
     },
-    subs: ['YaEblan', 'Провоцирую', 'KaktusEnjoyers', '#АлисаСтой', 'Helicopter', 'Baracopter'],
+    subs: ['YaEblan', 'Блядей корёжит', 'ЯГном', '#АлисаСтой', 'Helicopter', 'Baracopter'],
     friends: [{ username: 'cofedish', avatar: '/assets/avatars/avatar-cofedish.png' }],
     theme: 'blue'
   }
@@ -204,8 +204,9 @@ function main() {
       const posterPath = path.join(POSTERS_DIR, slug, posterFilename);
       const posterUrl = `/videos/posters/${slug}/${posterFilename}`;
 
-      // Try to generate poster
-      const hasPoster = generatePoster(videoPath, posterPath);
+      // Prefer existing posters; generate when enabled
+      const posterExists = fs.existsSync(posterPath);
+      const hasPoster = posterExists || generatePoster(videoPath, posterPath);
 
       // Build video object
       const video = {

@@ -9,9 +9,14 @@ MESSAGE="${1:-feat(media): add new content}"
 echo "=== Add Media & Deploy ==="
 echo ""
 
-# 1. Generate manifest
-echo "1. Generating media manifest..."
-npm run generate-media
+# 1. Generate manifest (+ posters if ffmpeg is available)
+if command -v ffmpeg >/dev/null 2>&1; then
+  echo "1. Generating media manifest and posters..."
+  npm run generate-posters
+else
+  echo "1. Generating media manifest (ffmpeg not found, posters skipped)..."
+  npm run generate-media
+fi
 
 # 2. Commit and push
 echo ""
