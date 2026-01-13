@@ -170,6 +170,57 @@ function TagFilter({ tags, activeTag, onTagChange }) {
 }
 
 // Main Profile Component
+function normalizeManifest(manifest) {
+  if (!manifest || typeof manifest !== 'object') return null;
+  if (manifest.developers && typeof manifest.developers === 'object') return manifest;
+
+  const developers = {};
+  const allTags = new Set();
+
+  for (const [slug, legacy] of Object.entries(manifest)) {
+    if (!legacy || typeof legacy !== 'object') continue;
+
+    const videos = Array.isArray(legacy.videos)
+      ? legacy.videos.map((src, index) => {
+          const filename = typeof src === 'string' ? src.split('/').pop() || '' : '';
+          const title = filename ? filename.replace(/\.[^.]+$/, '').replace(/_/g, ' ') : 'Video';
+          const idBase = filename || `video_${index}`;
+          const id = `${slug}_${idBase.replace(/[^a-zA-Z0-9]/g, '_')}`;
+          const tags = [slug];
+          tags.forEach((tag) => allTags.add(tag));
+          return {
+            id,
+            src,
+            filename,
+            title,
+            tags,
+            date: null,
+            size: 0,
+            poster: null,
+            featured: false
+          };
+        })
+      : [];
+
+    const photos = Array.isArray(legacy.photos) ? legacy.photos : [];
+    developers[slug] = {
+      ...legacy,
+      slug,
+      videos,
+      photos,
+      videoCount: videos.length,
+      photoCount: photos.length,
+      featured: []
+    };
+  }
+
+  return {
+    generated: new Date().toISOString(),
+    developers,
+    allTags: [...allTags].sort()
+  };
+}
+
 export default function Profile() {
   const { username } = useParams();
   const [data, setData] = useState(null);
@@ -181,10 +232,12 @@ export default function Profile() {
   useEffect(() => {
     setLoading(true);
 
-    fetch('/data/media.json')
+    fetch('/data/media.json', { cache: 'no-store' })
       .then((r) => r.json())
       .then((manifest) => {
-        const profile = manifest.developers?.[username];
+        const normalized = normalizeManifest(manifest);
+        const slug = (username || '').toLowerCase().trim();
+        const profile = normalized?.developers?.[slug] || normalized?.developers?.[username];
 
         if (!profile) {
           setData({ error: true });
@@ -194,7 +247,7 @@ export default function Profile() {
 
         setData({
           ...profile,
-          allTags: manifest.allTags || []
+          allTags: normalized?.allTags || []
         });
         setLoading(false);
       })
