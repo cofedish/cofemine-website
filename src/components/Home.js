@@ -167,8 +167,8 @@ const Home = () => {
               <img src="/img/mods-icon.png" alt="Много модов" />
             </div>
             <div className="card-text">
-              <h3>Много модов</h3>
-              <p>Я ебу хули тут так много?</p>
+              <h3>Дохуя модов</h3>
+              <p>Сколька!?!?!?</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -257,7 +257,7 @@ const Home = () => {
             <div className="team-member">
               <img src="/assets/avatars/avatar-bekkel.png" alt="Беккель" />
               <h3>Беккель</h3>
-              <p>Отец неведомой летающей хуйни, гроза паблика 314Русский_пОлИгОн_1337_ГОЙДА</p>
+              <p>Отец неведомой летающей хуйни</p>
             </div>
           </Link>
         </div>
