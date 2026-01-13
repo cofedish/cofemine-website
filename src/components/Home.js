@@ -150,7 +150,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Более 0 серверов</h3>
-              <p>Играй на любом сервере и находи новых друзей!</p>
+              <p>Играй на любом сервере и теряй новых друзей!</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -159,7 +159,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Нет донат вещей</h3>
-              <p>У нас нет доната — честно и свободно для всех.</p>
+              <p>Я каменщик, работаю 3 дня без зарплаты</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -168,7 +168,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Много модов</h3>
-              <p>Широкий выбор модификаций для любого вкуса.</p>
+              <p>Я ебу хули тут так много?</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -179,7 +179,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Секретные механики</h3>
-              <p>Уникальные фичи и неожиданные возможности.</p>
+              <p>Потому что мы сами не знаем что собрали</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -188,7 +188,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Развитая экономика</h3>
-              <p>Баланс и честная система торговли.</p>
+              <p>1 починка 5928 изумрудов + налог партии</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -196,8 +196,8 @@ const Home = () => {
               <img src="/img/bekkel.png" alt="Новые возможности" />
             </div>
             <div className="card-text">
-              <h3>Новые возможности</h3>
-              <p>Постоянные обновления и расширение функционала.</p>
+              <h3>Неведомая латющая хуйня 3.0</h3>
+              <p>Что это блять?...</p>
             </div>
           </div>
           <div className="why-us-card">
@@ -208,7 +208,7 @@ const Home = () => {
             </div>
             <div className="card-text">
               <h3>Полный контроль</h3>
-              <p>Безопасность и стабильность превыше всего.</p>
+              <p>Никаких великих фокусников и прочих сомнительных личностей</p>
             </div>
           </div>
         </div>
@@ -257,7 +257,7 @@ const Home = () => {
             <div className="team-member">
               <img src="/assets/avatars/avatar-bekkel.png" alt="Беккель" />
               <h3>Беккель</h3>
-              <p>Отец неведомой летающей хуйни</p>
+              <p>Отец неведомой летающей хуйни, гроза паблика 314Русский_пОлИгОн_1337_ГОЙДА</p>
             </div>
           </Link>
         </div>
