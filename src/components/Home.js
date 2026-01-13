@@ -26,7 +26,7 @@ const Home = () => {
 
     const fetchServerStatus = async () => {
       try {
-        const res = await fetch(`https://api.mcsrvstat.us/2/cofemine.online`);
+        const res = await fetch(`https://api.mcsrvstat.us/2/server.cofemine.ru`);
         const data = await res.json();
         if (data.online) {
           setServerStatus({
@@ -89,8 +89,8 @@ const Home = () => {
       <div className={`sticky-menu ${stickyMenuVisible ? 'visible' : 'hidden'}`}>
         <h1><Link to="/">CofeMine</Link></h1>
         <div className="buttons-container">
-          <a href="https://disk.yandex.ru/d/SMmbn7lTqUOT_A" className="button">Скачать сборку</a>
-          <a href="https://github.com/HMCL-dev/HMCL/releases/download/release-3.6.12/HMCL-3.6.12.exe" className="button">Скачать лаунчер</a>
+          <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">Скачать сборку</a>
+          <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">Скачать лаунчер</a>
         </div>
       </div>
 
@@ -108,8 +108,8 @@ const Home = () => {
         <div className={`welcome-content ${welcomeVisible ? 'visible' : ''}`}>
           <h1>CofeMine</h1>
           <p>Добро пожаловать в конченый мир Minecraft!</p>
-          <a href="https://disk.yandex.ru/d/SMmbn7lTqUOT_A" className="button">Скачать сборку</a>
-          <a href="https://github.com/HMCL-dev/HMCL/releases/download/release-3.6.12/HMCL-3.6.12.exe" className="button">Скачать лаунчер</a>
+          <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">Скачать сборку</a>
+          <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">Скачать лаунчер</a>
         </div>
       </section>
 
@@ -233,7 +233,7 @@ const Home = () => {
 
       {/* Подвал */}
       <footer>
-        <p>© 2025 CofeMine. Все права защищены Беккелем. <Link to="/contacts">Контакты</Link></p>
+        <p>© 2026 CofeMine. Все права защищены Беккелем. <Link to="/contacts">Контакты</Link></p>
       </footer>
     </div>
   );
