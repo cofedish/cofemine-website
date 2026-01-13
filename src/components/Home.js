@@ -193,7 +193,7 @@ const Home = () => {
         <div className="server-card">
           <div className="server-info">
             <h3>CofeMine</h3>
-            <p><strong>IP:</strong> cofemine.online</p>
+            <p><strong>IP:</strong> server.cofemine.ru</p>
             <div className="server-status">
               <span className={`status-indicator ${serverStatus.online ? 'online' : 'offline'}`}></span>
               <p className="status-text">
