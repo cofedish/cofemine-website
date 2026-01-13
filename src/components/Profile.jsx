@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 import './Profile.css';
 
 // Video Card Component - loads only poster, not video
@@ -304,6 +305,7 @@ export default function Profile() {
             </svg>
             Back
           </Link>
+          <ThemeToggle className="theme-toggle--compact" />
         </div>
       </header>
 

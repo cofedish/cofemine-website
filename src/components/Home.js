@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 const Home = () => {
   const [serverStatus, setServerStatus] = useState({ online: false, players: 0, max: 0 });
@@ -69,7 +70,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Фоновая музыка */}
+      {/* Background music */}
       <audio
         id="background-music"
         ref={audioRef}
@@ -82,19 +83,33 @@ const Home = () => {
         }}
       >
         <source src="/audio/background-music.mp3" type="audio/mpeg" />
-        Ваш браузер не поддерживает аудио.
       </audio>
 
-      {/* Фиксированное меню */}
-      <div className={`sticky-menu ${stickyMenuVisible ? 'visible' : 'hidden'}`}>
-        <h1><Link to="/">CofeMine</Link></h1>
+      {/* Sticky Header */}
+      <header className={`sticky-menu ${stickyMenuVisible ? 'visible' : 'hidden'}`}>
+        <div className="sticky-menu__logo">
+          <Link to="/">
+            <img
+              src="/assets/logo.svg"
+              alt="CofeMine"
+              className="sticky-menu__logo-img"
+              onError={(e) => {
+                // Fallback to text if logo doesn't load
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
+            />
+            <span className="sticky-menu__logo-text" style={{ display: 'none' }}>CofeMine</span>
+          </Link>
+        </div>
         <div className="buttons-container">
           <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">Скачать сборку</a>
           <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">Скачать лаунчер</a>
+          <ThemeToggle className="theme-toggle--compact" />
         </div>
-      </div>
+      </header>
 
-      {/* Экран приветствия */}
+      {/* Welcome Screen */}
       <section id="welcome" className="welcome-screen">
         <video
           id="bg-video"
@@ -106,14 +121,39 @@ const Home = () => {
           playsInline
         />
         <div className={`welcome-content ${welcomeVisible ? 'visible' : ''}`}>
+          {/* Logo image */}
+          <img
+            src="/assets/logo.svg"
+            alt="CofeMine"
+            className="welcome-content__logo"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
           <h1>CofeMine</h1>
           <p>Добро пожаловать в конченый мир Minecraft!</p>
-          <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">Скачать сборку</a>
-          <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">Скачать лаунчер</a>
+          <div className="welcome-content__buttons">
+            <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+              Скачать сборку
+            </a>
+            <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button button--secondary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/>
+              </svg>
+              Скачать лаунчер
+            </a>
+          </div>
+          {/* Theme toggle for welcome screen */}
+          <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+            <ThemeToggle />
+          </div>
         </div>
       </section>
 
-      {/* Раздел "Почему мы?" */}
+      {/* Why Us Section */}
       <section className="why-us">
         <h2>Почему мы?</h2>
         <div className="why-us-container">
@@ -146,7 +186,7 @@ const Home = () => {
           </div>
           <div className="why-us-card">
             <div className="card-video">
-              <video autoPlay loop muted>
+              <video autoPlay loop muted playsInline>
                 <source src="/videos/sneaky_compressed.mp4" type="video/mp4" />
               </video>
             </div>
@@ -175,7 +215,7 @@ const Home = () => {
           </div>
           <div className="why-us-card">
             <div className="card-video">
-              <video autoPlay loop muted>
+              <video autoPlay loop muted playsInline>
                 <source src="/videos/beholder.mp4" type="video/mp4" />
               </video>
             </div>
@@ -187,7 +227,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Блок "Наш сервер" */}
+      {/* Server Details */}
       <section className="server-details">
         <h2>Наш сервер</h2>
         <div className="server-card">
@@ -202,7 +242,12 @@ const Home = () => {
                   : 'Сервер оффлайн'}
               </p>
             </div>
-            <a href="https://disk.yandex.ru/d/SMmbn7lTqUOT_A" className="button download-button">Скачать сборку</a>
+            <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button download-button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+              Скачать сборку
+            </a>
           </div>
           <div className="server-image">
             <img src="/img/cofemine-server.jpg" alt="CofeMine Server" />
@@ -210,7 +255,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Блок "Наша команда" */}
+      {/* Team Section */}
       <section className="team">
         <h2>Наша команда</h2>
         <div className="team-container">
@@ -231,7 +276,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Подвал */}
+      {/* Footer */}
       <footer>
         <p>© 2026 CofeMine. Все права защищены Беккелем. <Link to="/contacts">Контакты</Link></p>
       </footer>

@@ -1,80 +1,116 @@
-/* Contacts.css */
-.sticky-menu {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--bg-color-default);
+/* ============================================
+   Contacts Page Styles
+   Uses global design tokens
+   ============================================ */
+
+.contacts-page {
+  min-height: 100vh;
   display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  z-index: 100;
-  border-bottom: 1px solid var(--secondary-default);
-}
-.sticky-menu.visible {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.3s;
-}
-.sticky-menu h1 {
-  margin: 0;
-}
-.sticky-menu .logo {
-  height: 60px;
-  width: auto;
-  vertical-align: middle;
+  flex-direction: column;
+  background: var(--color-bg);
 }
 
-.contacts {
-  padding: 80px 20px 20px;
-  max-width: 900px;
+/* Header is in index.css, this adds contacts-specific adjustments */
+.contacts-page .sticky-menu {
+  position: relative;
+  opacity: 1;
+  transform: none;
+}
+
+/* Main content */
+.contacts-page .contacts {
+  flex: 1;
+  padding: var(--space-12) var(--space-5);
+  padding-top: var(--space-10);
+  max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
 }
-.contacts-container {
+
+.contacts-page .contacts h2 {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.contacts-page .contacts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5);
 }
-.contact-card {
+
+.contacts-page .contact-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  padding: 20px;
-  border: 2px solid var(--secondary-default);
-  border-radius: 8px;
-  background: var(--bg-color-default);
-  transition: transform 0.2s;
+  padding: var(--space-6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
-.contact-card:hover {
+
+/* Glint effect */
+.contacts-page .contact-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(163, 102, 255, 0.08) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+}
+
+.contacts-page .contact-card:hover::before {
+  left: 150%;
+}
+
+.contacts-page .contact-card:hover {
   transform: translateY(-4px);
-}
-.contact-card img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 10px;
-}
-.contact-card.vk {
-  border-color: #4a76a8;
-}
-.contact-card.tg {
-  border-color: #0088cc;
-}
-.contact-card.dc {
-  border-color: #7289da;
-}
-.contact-card.gh {
-  border-color: #333;
+  border-color: var(--color-accent);
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* Подвал */
-footer {
-    background-color: #5d4037;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
+.contacts-page .contact-card img {
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--space-4);
+  transition: transform var(--transition-base);
 }
 
-footer a {
-    color: #f1e3db;
-    text-decoration: none;
+.contacts-page .contact-card:hover img {
+  transform: scale(1.1);
+}
+
+.contacts-page .contact-card h3 {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text);
+  font-size: 1.1rem;
+}
+
+.contacts-page .contact-card p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Footer uses global styles */
+.contacts-page footer {
+  margin-top: auto;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contacts-page .contacts-container {
+    grid-template-columns: 1fr;
+  }
 }

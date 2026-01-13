@@ -1,38 +1,42 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 import './Contacts.css';
 
 export default function Contacts() {
   const [logoError, setLogoError] = useState(false);
-  const logoSrc = '/assets/logo.png';
 
   return (
-    <div>
-      {/* Фиксированное меню */}
-      <div className="sticky-menu visible">
-        <h1>
+    <div className="contacts-page">
+      {/* Header */}
+      <header className="sticky-menu visible">
+        <div className="sticky-menu__logo">
           <Link to="/">
             {!logoError ? (
               <img
-                src={logoSrc}
+                src="/assets/logo.svg"
                 alt="CofeMine"
-                className="logo"
+                className="sticky-menu__logo-img"
                 onError={() => setLogoError(true)}
               />
             ) : (
-              'CofeMine'
+              <span className="sticky-menu__logo-text">CofeMine</span>
             )}
           </Link>
-        </h1>
-      </div>
+        </div>
+        <div className="buttons-container">
+          <Link to="/" className="button">На главную</Link>
+          <ThemeToggle className="theme-toggle--compact" />
+        </div>
+      </header>
 
-      {/* Страница контактов */}
+      {/* Contacts Section */}
       <section className="contacts">
-        <h2>📬 Свяжитесь с нами</h2>
+        <h2>Свяжитесь с нами</h2>
         <div className="contacts-container">
           <a
             href="https://vk.com/cofedish"
-            className="contact-card vk"
+            className="contact-card"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -42,7 +46,7 @@ export default function Contacts() {
           </a>
           <a
             href="https://t.me/COFEDISH"
-            className="contact-card tg"
+            className="contact-card"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -52,7 +56,7 @@ export default function Contacts() {
           </a>
           <a
             href="https://discord.gg/vPuRkNMxmw"
-            className="contact-card dc"
+            className="contact-card"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -62,7 +66,7 @@ export default function Contacts() {
           </a>
           <a
             href="https://github.com/cofedish"
-            className="contact-card gh"
+            className="contact-card"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -73,10 +77,10 @@ export default function Contacts() {
         </div>
       </section>
 
-      {/* Подвал */}
+      {/* Footer */}
       <footer>
         <p>
-          © 2025 CofeMine. Все права защищены Беккелем. <Link to="/">На главную</Link>
+          © 2026 CofeMine. Все права защищены Беккелем. <Link to="/">На главную</Link>
         </p>
       </footer>
     </div>
