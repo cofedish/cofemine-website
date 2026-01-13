@@ -74,11 +74,15 @@ ssh $SSH_OPTS $DEPLOY_USER@$DEPLOY_HOST << EOF
 
     # Only create symlinks if current exists
     if [ -L current ] || [ -d current ]; then
+        # Get the actual release directory name
+        RELEASE_DIR=\$(readlink current)
+
         for dir in videos audio assets; do
             if [ -d shared/\$dir ]; then
-                rm -rf current/\$dir 2>/dev/null || true
-                ln -sfn ../shared/\$dir current/\$dir
-                echo "Linked: current/\$dir -> shared/\$dir"
+                # Symlinks need ../../shared because they're in releases/<name>/
+                rm -rf \$RELEASE_DIR/\$dir 2>/dev/null || true
+                ln -sfn ../../shared/\$dir \$RELEASE_DIR/\$dir
+                echo "Linked: \$RELEASE_DIR/\$dir -> ../../shared/\$dir"
             fi
         done
     else

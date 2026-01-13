@@ -69,21 +69,28 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           SSH_HOST: ${{ secrets.DEPLOY_HOST }}
-          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
+          # Write SSH key
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          # Add known hosts - use secret if provided, otherwise scan
-          if [ -n "$KNOWN_HOSTS" ]; then
-            echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-          else
-            ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          fi
+          # Get host keys (without hashing for reliability)
+          ssh-keyscan -t ed25519,rsa "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
           chmod 644 ~/.ssh/known_hosts
+
+          # SSH config for convenience
+          cat >> ~/.ssh/config << EOC
+          Host deploy-target
+            HostName $SSH_HOST
+            User ${{ secrets.DEPLOY_USER }}
+            Port ${{ secrets.DEPLOY_PORT || '22' }}
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+          EOC
+          chmod 600 ~/.ssh/config
 
       - name: Create release directory
         env:
@@ -126,10 +133,12 @@ jobs:
             echo "Deployed release: ${{ env.RELEASE_NAME }}"
 
             # Link shared media directories (videos, audio, assets)
+            # Note: symlinks need ../../shared because current -> releases/<name>/
+            # so from releases/<name>/, we need ../.. to get back to DEPLOY_PATH
             for dir in videos audio assets data; do
               if [ -d shared/\$dir ]; then
-                rm -rf current/\$dir 2>/dev/null || true
-                ln -sfn ../shared/\$dir current/\$dir
+                rm -rf releases/${{ env.RELEASE_NAME }}/\$dir 2>/dev/null || true
+                ln -sfn ../../shared/\$dir releases/${{ env.RELEASE_NAME }}/\$dir
                 echo "Linked shared/\$dir"
               fi
             done
