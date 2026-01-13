@@ -90,7 +90,7 @@ const Home = () => {
         <div className="sticky-menu__logo">
           <Link to="/">
             <img
-              src="/assets/logo.svg"
+              src="/assets/logo.png"
               alt="CofeMine"
               className="sticky-menu__logo-img"
               onError={(e) => {
@@ -121,15 +121,6 @@ const Home = () => {
           playsInline
         />
         <div className={`welcome-content ${welcomeVisible ? 'visible' : ''}`}>
-          {/* Logo image */}
-          <img
-            src="/assets/logo.svg"
-            alt="CofeMine"
-            className="welcome-content__logo"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
           <h1>CofeMine</h1>
           <p>Добро пожаловать в конченый мир Minecraft!</p>
           <div className="welcome-content__buttons">
@@ -145,10 +136,6 @@ const Home = () => {
               </svg>
               Скачать лаунчер
             </a>
-          </div>
-          {/* Theme toggle for welcome screen */}
-          <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
-            <ThemeToggle />
           </div>
         </div>
       </section>
