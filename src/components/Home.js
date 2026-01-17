@@ -10,7 +10,7 @@ const Home = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.1;
+      audioRef.current.volume = 0.05;
       audioRef.current.muted = false;
     }
 
@@ -79,7 +79,7 @@ const Home = () => {
         muted
         playsInline
         onCanPlay={() => {
-          if (audioRef.current) audioRef.current.volume = 0.1;
+          if (audioRef.current) audioRef.current.volume = 0.05;
         }}
       >
         <source src="/audio/background-music.mp3" type="audio/mpeg" />

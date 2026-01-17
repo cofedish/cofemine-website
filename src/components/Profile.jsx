@@ -93,7 +93,7 @@ function VideoModal({ video, onClose }) {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.volume = 0.3;
+      videoRef.current.volume = 0.05;
       videoRef.current.play().catch(() => {});
     }
   }, []);
