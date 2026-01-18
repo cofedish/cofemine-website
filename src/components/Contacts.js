@@ -14,7 +14,7 @@ export default function Contacts() {
           <Link to="/">
             {!logoError ? (
               <img
-                src="/assets/logo.svg"
+                src="/assets/logo.png"
                 alt="CofeMine"
                 className="sticky-menu__logo-img"
                 onError={() => setLogoError(true)}
@@ -35,16 +35,6 @@ export default function Contacts() {
         <h2>Свяжитесь с нами</h2>
         <div className="contacts-container">
           <a
-            href="https://vk.com/cofedish"
-            className="contact-card"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/img/vk-icon.png" alt="VK" />
-            <h3>ВКонтакте</h3>
-            <p>Напишите нам в ВК</p>
-          </a>
-          <a
             href="https://t.me/COFEDISH"
             className="contact-card"
             target="_blank"
@@ -55,7 +45,7 @@ export default function Contacts() {
             <p>Напишите нам в телеграм</p>
           </a>
           <a
-            href="https://discord.gg/vPuRkNMxmw"
+            href="https://discord.gg/zyKM2XAnXW"
             className="contact-card"
             target="_blank"
             rel="noopener noreferrer"
@@ -72,7 +62,7 @@ export default function Contacts() {
           >
             <img src="/img/github-icon.png" alt="GitHub" />
             <h3>GitHub</h3>
-            <p>Посмотрите наш код</p>
+            <p>Посмотрите наш рофло код</p>
           </a>
         </div>
       </section>
