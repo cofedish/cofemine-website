@@ -126,15 +126,15 @@ const Home = () => {
           <div className="welcome-content__buttons">
             <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button button--secondary">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/>
-              </svg>
-              Скачать лаунчер
-            </a>
-            <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
               </svg>
               Скачать сборку
+            </a>
+            <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/>
+              </svg>
+              Скачать лаунчер
             </a>
           </div>
         </div>
