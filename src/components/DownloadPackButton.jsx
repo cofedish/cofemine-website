@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import './DownloadButtons.css';
+import useDropdown from './useDropdown';
 
 const PANEL_BASE_URL =
   process.env.REACT_APP_PANEL_BASE_URL || 'https://panel.cofemine.ru';
@@ -18,21 +19,33 @@ const formatLoader = (loader, version) => {
 };
 
 const DownloadIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
   </svg>
 );
 
-const ChevronIcon = ({ open }) => (
+const Chevron = ({ open }) => (
   <svg
     className={`dl-chevron ${open ? 'is-open' : ''}`}
     width="14"
     height="14"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     aria-hidden="true"
+    focusable="false"
   >
-    <path d="M7 10l5 5 5-5H7z" />
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 );
 
@@ -47,11 +60,10 @@ const triggerDownload = (url, suggestedName) => {
 };
 
 const DownloadPackButton = ({ className = 'button', label = 'Скачать сборку', showIcon = true }) => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, direction, rootRef } = useDropdown({ desiredHeight: 280 });
   const [packs, setPacks] = useState(null);
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const rootRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -75,27 +87,14 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
     };
   }, []);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const onClick = (e) => {
-      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
-    };
-    const onKey = (e) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('mousedown', onClick);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onClick);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
-
-  const handlePackClick = useCallback((pack) => {
-    setOpen(false);
-    const filename = `${(pack.versionName || pack.displayName || 'cofemine').replace(/[^\w.-]+/g, '_')}.mrpack`;
-    triggerDownload(pack.mrpackUrl, filename);
-  }, []);
+  const handlePackClick = useCallback(
+    (pack) => {
+      setOpen(false);
+      const filename = `${(pack.versionName || pack.displayName || 'cofemine').replace(/[^\w.-]+/g, '_')}.mrpack`;
+      triggerDownload(pack.mrpackUrl, filename);
+    },
+    [setOpen],
+  );
 
   const renderMenu = () => {
     if (!loaded) {
@@ -110,11 +109,7 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
       return (
         <div className="dl-menu__status dl-menu__status--error">
           Не удалось получить список сборок.
-          <a
-            href={`${PANEL_BASE_URL}/api/p/index.json`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={`${PANEL_BASE_URL}/api/p/index.json`} target="_blank" rel="noopener noreferrer">
             Открыть напрямую
           </a>
         </div>
@@ -133,7 +128,9 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
               className="dl-menu__item"
               onClick={() => handlePackClick(pack)}
             >
-              <span className="dl-menu__item-title">{pack.displayName || pack.versionName || pack.id}</span>
+              <span className="dl-menu__item-title">
+                {pack.displayName || pack.versionName || pack.id}
+              </span>
               <span className="dl-menu__item-meta">
                 MC {pack.minecraft || '—'} · {formatLoader(pack.loader, pack.loaderVersion)}
               </span>
@@ -143,6 +140,8 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
       </ul>
     );
   };
+
+  const menuClass = `dl-menu${direction === 'up' ? ' dl-menu--up' : ''}`;
 
   return (
     <div className="dl-root" ref={rootRef}>
@@ -154,10 +153,10 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
         onClick={() => setOpen((v) => !v)}
       >
         {showIcon && <DownloadIcon />}
-        {label}
-        <ChevronIcon open={open} />
+        <span className="dl-trigger-label">{label}</span>
+        <Chevron open={open} />
       </button>
-      {open && <div className="dl-menu">{renderMenu()}</div>}
+      {open && <div className={menuClass}>{renderMenu()}</div>}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import './DownloadButtons.css';
+import useDropdown from './useDropdown';
 
 const RELEASES_API =
   'https://api.github.com/repos/cofedish/cofemine_launcher/releases/latest';
@@ -25,15 +26,13 @@ const detectOS = () => {
 const matchAsset = (assets, regex) =>
   assets.find((a) => regex.test(a.name) && !/\.sha256$/i.test(a.name));
 
-// Build a list of installer/portable options derived from release assets.
-// Order defines what shows in the dropdown.
 const buildOptions = (assets) => {
   if (!assets || assets.length === 0) return [];
 
   const winInstaller = matchAsset(assets, /-Setup\.exe$/i);
   const winPortable =
     matchAsset(assets, /^CofeMine-Launcher\.exe$/i) ||
-    assets.find((a) => /\.exe$/i.test(a.name) && !/Setup/i.test(a.name));
+    assets.find((a) => /\.exe$/i.test(a.name) && !/Setup/i.test(a.name) && !/\.sha256$/i.test(a.name));
   const macDmg = matchAsset(assets, /\.dmg$/i);
   const linuxDeb = matchAsset(assets, /\.deb$/i);
   const linuxRpm = matchAsset(assets, /\.rpm$/i);
@@ -45,7 +44,7 @@ const buildOptions = (assets) => {
   const push = (os, label, asset, hint) => {
     if (asset) opts.push({ os, label, asset, hint });
   };
-  push('windows', 'Установщик (Setup.exe)', winInstaller, 'рекомендуется для Windows');
+  push('windows', 'Установщик (Setup.exe)', winInstaller, 'рекомендуется');
   push('windows', 'Портативный .exe', winPortable, 'без установки');
   push('macos', 'Образ диска (.dmg)', macDmg);
   push('linux', '.deb пакет', linuxDeb, 'Debian, Ubuntu, Mint');
@@ -65,16 +64,34 @@ const pickPrimary = (options, os) => {
   return options.find((o) => o.os === 'any') || options[0] || null;
 };
 
-const ChevronIcon = ({ open }) => (
+const ShieldIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z" />
+  </svg>
+);
+
+const Chevron = ({ open }) => (
   <svg
     className={`dl-chevron ${open ? 'is-open' : ''}`}
     width="14"
     height="14"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     aria-hidden="true"
+    focusable="false"
   >
-    <path d="M7 10l5 5 5-5H7z" />
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 );
 
@@ -89,12 +106,11 @@ const triggerDownload = (url, name) => {
 };
 
 const DownloadLauncherButton = ({ className = 'button', label = 'Скачать лаунчер' }) => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, direction, rootRef } = useDropdown({ desiredHeight: 440 });
   const [options, setOptions] = useState(null);
   const [primary, setPrimary] = useState(null);
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const rootRef = useRef(null);
   const osRef = useRef(detectOS());
 
   useEffect(() => {
@@ -123,36 +139,13 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
     };
   }, []);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const onClick = (e) => {
-      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
-    };
-    const onKey = (e) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('mousedown', onClick);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onClick);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
-
-  const handlePrimary = useCallback(
-    (e) => {
-      // If we don't have data yet, fall through to GitHub releases as href.
-      if (!loaded || error || !primary) return;
-      e.preventDefault();
-      triggerDownload(primary.asset.browser_download_url, primary.asset.name);
+  const handleOption = useCallback(
+    (opt) => {
+      setOpen(false);
+      triggerDownload(opt.asset.browser_download_url, opt.asset.name);
     },
-    [loaded, error, primary],
+    [setOpen],
   );
-
-  const handleOption = useCallback((opt) => {
-    setOpen(false);
-    triggerDownload(opt.asset.browser_download_url, opt.asset.name);
-  }, []);
 
   const groups = useMemo(() => {
     if (!options) return null;
@@ -168,6 +161,17 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
       .filter((g) => g.items.length > 0);
   }, [options]);
 
+  // Reorder: place the recommended item at the top of its section so it's
+  // visible without scrolling, and so "для вашей ОС" lands above the fold.
+  const orderedGroups = useMemo(() => {
+    if (!groups || !primary) return groups;
+    return groups.map((g) => {
+      if (!g.items.includes(primary)) return g;
+      const rest = g.items.filter((i) => i !== primary);
+      return { ...g, items: [primary, ...rest] };
+    });
+  }, [groups, primary]);
+
   const renderMenu = () => {
     if (!loaded) {
       return (
@@ -178,7 +182,7 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
         </div>
       );
     }
-    if (error || !groups || groups.length === 0) {
+    if (error || !orderedGroups || orderedGroups.length === 0) {
       return (
         <div className="dl-menu__status dl-menu__status--error">
           Не удалось получить релиз.
@@ -190,7 +194,7 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
     }
     return (
       <div role="menu">
-        {groups.map((group) => (
+        {orderedGroups.map((group) => (
           <div className="dl-menu__section" key={group.os}>
             <div className="dl-menu__section-title">{group.label}</div>
             <ul className="dl-menu__list">
@@ -220,37 +224,22 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
     );
   };
 
-  // Fallback href: GitHub releases page if data is not ready / failed.
-  // This keeps right-click "save link as" and crawlers happy.
-  const fallbackHref =
-    primary && !error ? primary.asset.browser_download_url : RELEASES_PAGE;
+  const menuClass = `dl-menu${direction === 'up' ? ' dl-menu--up' : ''}`;
 
   return (
-    <div className="dl-launcher-split" ref={rootRef}>
-      <a
-        href={fallbackHref}
-        className={`${className} dl-split__main`}
-        onClick={handlePrimary}
-        rel="noopener noreferrer"
-        download={primary && !error ? primary.asset.name : undefined}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z" />
-        </svg>
-        {label}
-      </a>
+    <div className="dl-root" ref={rootRef}>
       <button
         type="button"
-        className={`${className} dl-split__toggle`}
+        className={className}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="Другие платформы"
-        title="Другие платформы"
         onClick={() => setOpen((v) => !v)}
       >
-        <ChevronIcon open={open} />
+        <ShieldIcon />
+        <span className="dl-trigger-label">{label}</span>
+        <Chevron open={open} />
       </button>
-      {open && <div className="dl-menu dl-menu--right">{renderMenu()}</div>}
+      {open && <div className={menuClass}>{renderMenu()}</div>}
     </div>
   );
 };

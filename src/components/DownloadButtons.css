@@ -7,14 +7,30 @@
   align-items: center;
 }
 
-/* Native <button> needs to inherit typography to match <a class="button"> */
+/* Buttons styled by consumer (.button class) — make sure native <button>
+   inherits typography, gets pointer cursor, and never shows text selection. */
+.dl-root > .button,
 button.button {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
   appearance: none;
   -webkit-appearance: none;
+}
+
+/* SVG icons inside triggers shouldn't capture pointer events — that prevents
+   the I-beam cursor from leaking through SVG content and keeps the entire
+   button surface acting as one click target. */
+.dl-root > .button svg,
+.dl-root > .button > * {
+  pointer-events: none;
+}
+
+.dl-trigger-label {
+  pointer-events: none;
 }
 
 .dl-chevron {
@@ -29,49 +45,15 @@ button.button {
 }
 
 /* ============================================
-   Split launcher button
-   ============================================ */
-.dl-launcher-split {
-  position: relative;
-  display: inline-flex;
-  align-items: stretch;
-}
-
-.dl-launcher-split > .button {
-  margin: 0;
-}
-
-.dl-launcher-split > .dl-split__main {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-}
-
-.dl-launcher-split > .dl-split__toggle {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  padding-left: var(--space-3);
-  padding-right: var(--space-3);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sticky-menu .dl-launcher-split > .dl-split__toggle {
-  padding-left: var(--space-2);
-  padding-right: var(--space-2);
-}
-
-/* ============================================
    Dropdown shell
    ============================================ */
 .dl-menu {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  min-width: 300px;
-  max-width: 380px;
-  max-height: min(420px, calc(100vh - 120px));
+  min-width: 280px;
+  max-width: 360px;
+  max-height: min(440px, calc(100vh - 100px));
   overflow-y: auto;
   overscroll-behavior: contain;
 
@@ -85,7 +67,7 @@ button.button {
     var(--shadow-xl),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
   z-index: var(--z-dropdown);
-  padding: var(--space-2);
+  padding: var(--space-1);
   text-align: left;
 
   transform-origin: top left;
@@ -99,15 +81,26 @@ button.button {
   transform-origin: top right;
 }
 
+/* Drop direction "up" — open above the trigger when there's no room below */
+.dl-menu--up {
+  top: auto;
+  bottom: calc(100% + 8px);
+  transform-origin: bottom left;
+  animation-name: dl-menu-in-up;
+}
+
+.dl-menu--up.dl-menu--right {
+  transform-origin: bottom right;
+}
+
 @keyframes dl-menu-in {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0%   { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0)     scale(1);    }
+}
+
+@keyframes dl-menu-in-up {
+  0%   { opacity: 0; transform: translateY(10px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -119,7 +112,7 @@ button.button {
   }
 }
 
-/* Custom scrollbar */
+/* Custom thin scrollbar */
 .dl-menu {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-hover) transparent;
@@ -130,7 +123,7 @@ button.button {
 }
 .dl-menu::-webkit-scrollbar-track {
   background: transparent;
-  margin: var(--space-2) 0;
+  margin: var(--space-1) 0;
 }
 .dl-menu::-webkit-scrollbar-thumb {
   background: var(--color-border-hover);
@@ -148,18 +141,18 @@ button.button {
    Sections (used in launcher menu)
    ============================================ */
 .dl-menu__section + .dl-menu__section {
-  margin-top: var(--space-1);
+  margin-top: 2px;
   border-top: 1px solid var(--color-border);
-  padding-top: var(--space-1);
+  padding-top: 2px;
 }
 
 .dl-menu__section-title {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-  padding: var(--space-2) var(--space-3) var(--space-1);
+  padding: 6px var(--space-2) 2px;
 }
 
 .dl-menu__list {
@@ -176,15 +169,12 @@ button.button {
    ============================================ */
 .dl-menu__item {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas:
-    'title chevron'
-    'meta  chevron';
-  align-items: center;
-  gap: 2px var(--space-2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
   width: 100%;
-  padding: var(--space-2) var(--space-3);
+  padding: 6px var(--space-2);
   background: transparent;
   border: 0;
   border-radius: var(--radius-md);
@@ -192,26 +182,12 @@ button.button {
   font: inherit;
   text-align: left;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
     transform var(--transition-fast);
-}
-
-.dl-menu__item::after {
-  content: '';
-  grid-area: chevron;
-  width: 14px;
-  height: 14px;
-  background-color: currentColor;
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' stroke='black' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
-          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' stroke='black' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition:
-    opacity var(--transition-fast),
-    transform var(--transition-fast);
-  align-self: center;
 }
 
 .dl-menu__item:hover,
@@ -219,12 +195,6 @@ button.button {
   background: var(--color-surface-hover);
   color: var(--color-accent);
   outline: none;
-}
-
-.dl-menu__item:hover::after,
-.dl-menu__item:focus-visible::after {
-  opacity: 0.7;
-  transform: translateX(0);
 }
 
 .dl-menu__item:active {
@@ -237,13 +207,16 @@ button.button {
 }
 
 .dl-menu__item.is-recommended:hover {
-  background: color-mix(in srgb, var(--color-accent-subtle) 60%, var(--color-surface-hover));
+  background: color-mix(
+    in srgb,
+    var(--color-accent-subtle) 60%,
+    var(--color-surface-hover)
+  );
 }
 
 .dl-menu__item-title {
-  grid-area: title;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.3;
   display: inline-flex;
   align-items: center;
@@ -252,26 +225,20 @@ button.button {
 }
 
 .dl-menu__item-meta {
-  grid-area: meta;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--color-text-secondary);
-  line-height: 1.3;
-}
-
-.dl-menu__item:hover .dl-menu__item-meta,
-.dl-menu__item:focus-visible .dl-menu__item-meta {
-  color: var(--color-text-secondary);
+  line-height: 1.25;
 }
 
 .dl-menu__badge {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 2px 6px;
   border-radius: var(--radius-full);
   background: var(--color-accent);
   color: var(--color-text-inverse);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   white-space: nowrap;
   line-height: 1.4;
 }
@@ -280,12 +247,12 @@ button.button {
    Status (loading / error)
    ============================================ */
 .dl-menu__status {
-  padding: var(--space-3);
+  padding: var(--space-2);
   font-size: 0.875rem;
   color: var(--color-text-secondary);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
   align-items: flex-start;
 }
 
@@ -300,16 +267,15 @@ button.button {
   color: var(--color-error);
 }
 
-/* Loading skeleton */
 .dl-menu__loading {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-2);
+  gap: 4px;
+  padding: 4px;
 }
 
 .dl-menu__skeleton {
-  height: 44px;
+  height: 38px;
   border-radius: var(--radius-md);
   background: linear-gradient(
     90deg,
@@ -322,7 +288,7 @@ button.button {
 }
 
 @keyframes dl-skeleton {
-  0% { background-position: 200% 0; }
+  0%   { background-position:  200% 0; }
   100% { background-position: -200% 0; }
 }
 
@@ -341,13 +307,17 @@ button.button {
   transform-origin: top right;
 }
 
+.sticky-menu .dl-menu.dl-menu--up {
+  transform-origin: bottom right;
+}
+
 /* ============================================
    Small screens
    ============================================ */
 @media (max-width: 600px) {
   .dl-menu {
-    min-width: 260px;
+    min-width: 240px;
     max-width: calc(100vw - 24px);
-    max-height: min(380px, calc(100vh - 100px));
+    max-height: min(380px, calc(100vh - 80px));
   }
 }
