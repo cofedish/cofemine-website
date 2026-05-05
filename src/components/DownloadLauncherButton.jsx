@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import './DownloadButtons.css';
 
 const RELEASES_API =
@@ -45,14 +45,14 @@ const buildOptions = (assets) => {
   const push = (os, label, asset, hint) => {
     if (asset) opts.push({ os, label, asset, hint });
   };
-  push('windows', 'Windows — установщик', winInstaller, 'рекомендуется');
-  push('windows', 'Windows — портативный .exe', winPortable);
-  push('macos', 'macOS — .dmg', macDmg);
-  push('linux', 'Linux — .deb', linuxDeb, 'Debian / Ubuntu');
-  push('linux', 'Linux — .rpm', linuxRpm, 'Fedora / RHEL');
-  push('linux', 'Linux — .AppImage', linuxAppImage);
-  push('any', 'Java JAR — универсальный', jar, 'нужен JRE 17+');
-  push('linux', 'Linux — .sh', sh);
+  push('windows', 'Установщик (Setup.exe)', winInstaller, 'рекомендуется для Windows');
+  push('windows', 'Портативный .exe', winPortable, 'без установки');
+  push('macos', 'Образ диска (.dmg)', macDmg);
+  push('linux', '.deb пакет', linuxDeb, 'Debian, Ubuntu, Mint');
+  push('linux', '.rpm пакет', linuxRpm, 'Fedora, RHEL, openSUSE');
+  push('linux', '.AppImage', linuxAppImage, 'без установки');
+  push('linux', 'Shell-скрипт (.sh)', sh, 'ручной запуск');
+  push('any', 'Java JAR', jar, 'требуется JRE 17+');
   return opts;
 };
 
@@ -154,9 +154,31 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
     triggerDownload(opt.asset.browser_download_url, opt.asset.name);
   }, []);
 
+  const groups = useMemo(() => {
+    if (!options) return null;
+    const labels = {
+      windows: 'Windows',
+      macos: 'macOS',
+      linux: 'Linux',
+      any: 'Универсальные',
+    };
+    const order = ['windows', 'macos', 'linux', 'any'];
+    return order
+      .map((os) => ({ os, label: labels[os], items: options.filter((o) => o.os === os) }))
+      .filter((g) => g.items.length > 0);
+  }, [options]);
+
   const renderMenu = () => {
-    if (!loaded) return <div className="dl-menu__status">Загрузка релиза…</div>;
-    if (error || !options || options.length === 0) {
+    if (!loaded) {
+      return (
+        <div className="dl-menu__loading" aria-busy="true" aria-label="Загрузка релиза">
+          <div className="dl-menu__skeleton" />
+          <div className="dl-menu__skeleton" />
+          <div className="dl-menu__skeleton" />
+        </div>
+      );
+    }
+    if (error || !groups || groups.length === 0) {
       return (
         <div className="dl-menu__status dl-menu__status--error">
           Не удалось получить релиз.
@@ -167,27 +189,34 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
       );
     }
     return (
-      <ul className="dl-menu__list" role="menu">
-        {options.map((opt) => {
-          const recommended = opt === primary;
-          return (
-            <li key={opt.asset.id} role="none">
-              <button
-                type="button"
-                role="menuitem"
-                className={`dl-menu__item ${recommended ? 'is-recommended' : ''}`}
-                onClick={() => handleOption(opt)}
-              >
-                <span className="dl-menu__item-title">
-                  {opt.label}
-                  {recommended && <span className="dl-menu__badge">для вашей ОС</span>}
-                </span>
-                {opt.hint && <span className="dl-menu__item-meta">{opt.hint}</span>}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <div role="menu">
+        {groups.map((group) => (
+          <div className="dl-menu__section" key={group.os}>
+            <div className="dl-menu__section-title">{group.label}</div>
+            <ul className="dl-menu__list">
+              {group.items.map((opt) => {
+                const recommended = opt === primary;
+                return (
+                  <li key={opt.asset.id} role="none">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={`dl-menu__item ${recommended ? 'is-recommended' : ''}`}
+                      onClick={() => handleOption(opt)}
+                    >
+                      <span className="dl-menu__item-title">
+                        {opt.label}
+                        {recommended && <span className="dl-menu__badge">для вашей ОС</span>}
+                      </span>
+                      {opt.hint && <span className="dl-menu__item-meta">{opt.hint}</span>}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
     );
   };
 

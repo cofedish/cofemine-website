@@ -99,7 +99,12 @@ const DownloadPackButton = ({ className = 'button', label = 'Скачать сб
 
   const renderMenu = () => {
     if (!loaded) {
-      return <div className="dl-menu__status">Загрузка списка…</div>;
+      return (
+        <div className="dl-menu__loading" aria-busy="true" aria-label="Загрузка списка сборок">
+          <div className="dl-menu__skeleton" />
+          <div className="dl-menu__skeleton" />
+        </div>
+      );
     }
     if (error) {
       return (

@@ -1,8 +1,10 @@
+/* ============================================
+   Trigger wrappers
+   ============================================ */
 .dl-root {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
 }
 
 /* Native <button> needs to inherit typography to match <a class="button"> */
@@ -15,118 +17,20 @@ button.button {
   -webkit-appearance: none;
 }
 
-/* Chevron arrow inside a trigger */
 .dl-chevron {
   margin-left: var(--space-1);
   transition: transform var(--transition-base);
   vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .dl-chevron.is-open {
   transform: rotate(180deg);
 }
 
-/* Dropdown menu */
-.dl-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  min-width: 280px;
-  max-width: 360px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  z-index: 100;
-  padding: var(--space-1);
-  text-align: left;
-}
-
-.dl-menu--right {
-  left: auto;
-  right: 0;
-}
-
-.dl-menu__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.dl-menu__item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  width: 100%;
-  padding: var(--space-2) var(--space-3);
-  background: transparent;
-  border: 0;
-  border-radius: var(--radius-sm, 6px);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--transition-base), color var(--transition-base);
-}
-
-.dl-menu__item:hover,
-.dl-menu__item:focus-visible {
-  background: var(--color-surface-hover);
-  color: var(--color-accent);
-  outline: none;
-}
-
-.dl-menu__item.is-recommended {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.dl-menu__item-title {
-  font-weight: 600;
-  font-size: 0.95rem;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.dl-menu__item-meta {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-}
-
-.dl-menu__badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: var(--color-accent);
-  color: var(--color-text-inverse, #fff);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.dl-menu__status {
-  padding: var(--space-3);
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.dl-menu__status a {
-  color: var(--color-accent);
-}
-
-.dl-menu__status--error {
-  color: var(--color-error, #c62828);
-}
-
-/* Split launcher button: main download + chevron toggle share one border */
+/* ============================================
+   Split launcher button
+   ============================================ */
 .dl-launcher-split {
   position: relative;
   display: inline-flex;
@@ -134,7 +38,6 @@ button.button {
 }
 
 .dl-launcher-split > .button {
-  /* keep typography and base styles from the consumer's .button class */
   margin: 0;
 }
 
@@ -154,22 +57,297 @@ button.button {
   justify-content: center;
 }
 
-/* Sticky header: keep the toggle compact */
 .sticky-menu .dl-launcher-split > .dl-split__toggle {
   padding-left: var(--space-2);
   padding-right: var(--space-2);
 }
 
-/* Dropdown placement tweaks for cramped containers */
+/* ============================================
+   Dropdown shell
+   ============================================ */
+.dl-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 300px;
+  max-width: 380px;
+  max-height: min(420px, calc(100vh - 120px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  z-index: var(--z-dropdown);
+  padding: var(--space-2);
+  text-align: left;
+
+  transform-origin: top left;
+  animation: dl-menu-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.dl-menu--right {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}
+
+@keyframes dl-menu-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-menu {
+    animation: none;
+  }
+  .dl-chevron {
+    transition: none;
+  }
+}
+
+/* Custom scrollbar */
+.dl-menu {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-hover) transparent;
+}
+
+.dl-menu::-webkit-scrollbar {
+  width: 8px;
+}
+.dl-menu::-webkit-scrollbar-track {
+  background: transparent;
+  margin: var(--space-2) 0;
+}
+.dl-menu::-webkit-scrollbar-thumb {
+  background: var(--color-border-hover);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.dl-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+/* ============================================
+   Sections (used in launcher menu)
+   ============================================ */
+.dl-menu__section + .dl-menu__section {
+  margin-top: var(--space-1);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-1);
+}
+
+.dl-menu__section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-3) var(--space-1);
+}
+
+.dl-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ============================================
+   Items
+   ============================================ */
+.dl-menu__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'title chevron'
+    'meta  chevron';
+  align-items: center;
+  gap: 2px var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.dl-menu__item::after {
+  content: '';
+  grid-area: chevron;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' stroke='black' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 6l6 6-6 6' stroke='black' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+  align-self: center;
+}
+
+.dl-menu__item:hover,
+.dl-menu__item:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-accent);
+  outline: none;
+}
+
+.dl-menu__item:hover::after,
+.dl-menu__item:focus-visible::after {
+  opacity: 0.7;
+  transform: translateX(0);
+}
+
+.dl-menu__item:active {
+  transform: scale(0.985);
+}
+
+.dl-menu__item.is-recommended {
+  background: var(--color-accent-subtle);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+.dl-menu__item.is-recommended:hover {
+  background: color-mix(in srgb, var(--color-accent-subtle) 60%, var(--color-surface-hover));
+}
+
+.dl-menu__item-title {
+  grid-area: title;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.dl-menu__item-meta {
+  grid-area: meta;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+}
+
+.dl-menu__item:hover .dl-menu__item-meta,
+.dl-menu__item:focus-visible .dl-menu__item-meta {
+  color: var(--color-text-secondary);
+}
+
+.dl-menu__badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* ============================================
+   Status (loading / error)
+   ============================================ */
+.dl-menu__status {
+  padding: var(--space-3);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.dl-menu__status a {
+  color: var(--color-accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dl-menu__status--error {
+  color: var(--color-error);
+}
+
+/* Loading skeleton */
+.dl-menu__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+.dl-menu__skeleton {
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-hover) 0%,
+    var(--color-border) 50%,
+    var(--color-surface-hover) 100%
+  );
+  background-size: 200% 100%;
+  animation: dl-skeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes dl-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-menu__skeleton {
+    animation: none;
+  }
+}
+
+/* ============================================
+   Sticky-header positioning
+   ============================================ */
 .sticky-menu .dl-menu {
   right: 0;
   left: auto;
+  transform-origin: top right;
 }
 
-/* On small screens menu shouldn't overflow viewport */
+/* ============================================
+   Small screens
+   ============================================ */
 @media (max-width: 600px) {
   .dl-menu {
-    min-width: 240px;
-    max-width: calc(100vw - 32px);
+    min-width: 260px;
+    max-width: calc(100vw - 24px);
+    max-height: min(380px, calc(100vh - 100px));
   }
 }
