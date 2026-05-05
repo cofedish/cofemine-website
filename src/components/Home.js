@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import DownloadPackButton from './DownloadPackButton';
+import DownloadLauncherButton from './DownloadLauncherButton';
 
 const Home = () => {
   const [serverStatus, setServerStatus] = useState({ online: false, players: 0, max: 0 });
@@ -103,8 +105,8 @@ const Home = () => {
           </Link>
         </div>
         <div className="buttons-container">
-          <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button">Скачать сборку</a>
-          <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">Скачать лаунчер</a>
+          <DownloadPackButton className="button" showIcon={false} />
+          <DownloadLauncherButton className="button" />
           <ThemeToggle className="theme-toggle--compact" />
         </div>
       </header>
@@ -124,18 +126,8 @@ const Home = () => {
           <h1>CofeMine</h1>
           <p>Добро пожаловать в конченый мир Minecraft!</p>
           <div className="welcome-content__buttons">
-            <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button button--secondary">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-              </svg>
-              Скачать сборку
-            </a>
-            <a href="https://github.com/cofedish/cofemine_launcher/releases" className="button">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/>
-              </svg>
-              Скачать лаунчер
-            </a>
+            <DownloadPackButton className="button button--secondary" />
+            <DownloadLauncherButton className="button" />
           </div>
         </div>
       </section>
@@ -229,12 +221,7 @@ const Home = () => {
                   : 'Сервер оффлайн'}
               </p>
             </div>
-            <a href="https://disk.yandex.ru/d/hodbEP83a9fu_g" className="button download-button">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-              </svg>
-              Скачать сборку
-            </a>
+            <DownloadPackButton className="button download-button" />
           </div>
           <div className="server-image">
             <img src="/img/cofemine-server.jpg" alt="CofeMine Server" />

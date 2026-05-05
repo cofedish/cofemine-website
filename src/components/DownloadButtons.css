@@ -1,0 +1,183 @@
+.dl-root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Native <button> needs to inherit typography to match <a class="button"> */
+button.button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Chevron arrow inside a trigger */
+.dl-chevron {
+  margin-left: var(--space-1);
+  transition: transform var(--transition-base);
+  vertical-align: middle;
+}
+
+.dl-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.dl-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 280px;
+  max-width: 360px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  padding: var(--space-1);
+  text-align: left;
+}
+
+.dl-menu--right {
+  left: auto;
+  right: 0;
+}
+
+.dl-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dl-menu__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm, 6px);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+.dl-menu__item:hover,
+.dl-menu__item:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-accent);
+  outline: none;
+}
+
+.dl-menu__item.is-recommended {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.dl-menu__item-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dl-menu__item-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.dl-menu__badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-text-inverse, #fff);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dl-menu__status {
+  padding: var(--space-3);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dl-menu__status a {
+  color: var(--color-accent);
+}
+
+.dl-menu__status--error {
+  color: var(--color-error, #c62828);
+}
+
+/* Secondary "другие платформы" trigger next to launcher button */
+.dl-launcher-extra {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dl-link-button {
+  background: transparent;
+  border: 0;
+  color: var(--color-text-secondary);
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dl-link-button:hover,
+.dl-link-button:focus-visible {
+  color: var(--color-accent);
+  outline: none;
+}
+
+/* Above-the-fold welcome screen has white text — make the underline link readable */
+.welcome-content .dl-link-button {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.welcome-content .dl-link-button:hover {
+  color: #fff;
+}
+
+/* Sticky header version — hide the "другие платформы" link to keep the row compact */
+.sticky-menu .dl-launcher-extra {
+  display: none;
+}
+
+/* Dropdown placement tweaks for cramped containers */
+.sticky-menu .dl-menu {
+  right: 0;
+  left: auto;
+}
+
+/* On small screens menu shouldn't overflow viewport */
+@media (max-width: 600px) {
+  .dl-menu {
+    min-width: 240px;
+    max-width: calc(100vw - 32px);
+  }
+}
