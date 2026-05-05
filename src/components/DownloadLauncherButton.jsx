@@ -197,10 +197,10 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
     primary && !error ? primary.asset.browser_download_url : RELEASES_PAGE;
 
   return (
-    <div className="dl-root">
+    <div className="dl-launcher-split" ref={rootRef}>
       <a
         href={fallbackHref}
-        className={className}
+        className={`${className} dl-split__main`}
         onClick={handlePrimary}
         rel="noopener noreferrer"
         download={primary && !error ? primary.asset.name : undefined}
@@ -210,19 +210,18 @@ const DownloadLauncherButton = ({ className = 'button', label = 'Скачать 
         </svg>
         {label}
       </a>
-      <span className="dl-launcher-extra" ref={rootRef}>
-        <button
-          type="button"
-          className="dl-link-button"
-          aria-haspopup="menu"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          другие платформы
-          <ChevronIcon open={open} />
-        </button>
-        {open && <div className="dl-menu dl-menu--right">{renderMenu()}</div>}
-      </span>
+      <button
+        type="button"
+        className={`${className} dl-split__toggle`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label="Другие платформы"
+        title="Другие платформы"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <ChevronIcon open={open} />
+      </button>
+      {open && <div className="dl-menu dl-menu--right">{renderMenu()}</div>}
     </div>
   );
 };

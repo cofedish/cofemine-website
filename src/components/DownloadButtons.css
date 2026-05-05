@@ -126,46 +126,38 @@ button.button {
   color: var(--color-error, #c62828);
 }
 
-/* Secondary "другие платформы" trigger next to launcher button */
-.dl-launcher-extra {
+/* Split launcher button: main download + chevron toggle share one border */
+.dl-launcher-split {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: stretch;
 }
 
-.dl-link-button {
-  background: transparent;
-  border: 0;
-  color: var(--color-text-secondary);
-  padding: var(--space-1) var(--space-2);
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 3px;
+.dl-launcher-split > .button {
+  /* keep typography and base styles from the consumer's .button class */
+  margin: 0;
+}
+
+.dl-launcher-split > .dl-split__main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+}
+
+.dl-launcher-split > .dl-split__toggle {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
 }
 
-.dl-link-button:hover,
-.dl-link-button:focus-visible {
-  color: var(--color-accent);
-  outline: none;
-}
-
-/* Above-the-fold welcome screen has white text — make the underline link readable */
-.welcome-content .dl-link-button {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.welcome-content .dl-link-button:hover {
-  color: #fff;
-}
-
-/* Sticky header version — hide the "другие платформы" link to keep the row compact */
-.sticky-menu .dl-launcher-extra {
-  display: none;
+/* Sticky header: keep the toggle compact */
+.sticky-menu .dl-launcher-split > .dl-split__toggle {
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
 }
 
 /* Dropdown placement tweaks for cramped containers */
